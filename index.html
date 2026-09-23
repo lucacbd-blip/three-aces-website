@@ -190,7 +190,8 @@
   .field .full{ grid-column:span 2; }
   .tiers{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
   .tier{ background:var(--bg); border:1px solid var(--line2); padding:16px; cursor:pointer; display:flex; flex-direction:column; gap:6px; }
-  .tier b{ font-family:var(--display); font-size:30px; color:var(--gold); line-height:1; }
+  .tier b{ font-family:var(--display); font-size:26px; color:var(--gold); line-height:1; min-height:26px; }
+  .amounts{ display:flex; flex-wrap:wrap; gap:8px; }
   .tier strong{ font-size:12px; letter-spacing:.14em; text-transform:uppercase; }
   .tier span{ font-size:12.5px; color:var(--muted); }
   .tier.active{ border-color:var(--gold); box-shadow:inset 0 0 0 1px var(--gold); }
@@ -542,7 +543,7 @@
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <div><span class="eyebrow">Sponsorship</span><h2 class="display">BECOME A<br>PICNIC SPONSOR</h2></div>
-        <p>With your support, every dollar raised goes towards the event to keep the Italian culture strong in the community and with our youth. Three ways to sponsor, all $500.</p>
+        <p>With your support, every dollar raised goes towards the event to keep the Italian culture strong in the community and with our youth. $500 is the minimum to be a sponsor &mdash; cash, food and entertainment, or raffle prizes &mdash; and if you want to give more, we won&rsquo;t hold you back.</p>
       </div>
       <div class="contact-grid" data-reveal>
         <div>
@@ -554,16 +555,23 @@
           </div>
         </div>
         <form class="formblk" id="sponsorForm" novalidate>
+          <div class="field"><label>How would you like to sponsor? Pick one or more</label></div>
           <div class="tiers" id="tiers">
-            <div class="tier active" data-tier="Cash / Gift Cards"><b>$500</b><strong>Cash / Gift Cards</strong><span>Goes towards event expenses &mdash; venue, tent, and so on.</span></div>
-            <div class="tier" data-tier="Food / Entertainment"><b>$500</b><strong>Food / Entertainment</strong><span>Event expenses or your own services provided &mdash; food, snacks, entertainment.</span></div>
-            <div class="tier" data-tier="Raffle Prizes"><b>$500</b><strong>Raffle Prizes</strong><span>Goes towards the prizes, or one big prize &mdash; a TV, a tent.</span></div>
+            <div class="tier active" data-tier="Cash / Gift Cards"><b>&#10003;</b><strong>Cash / Gift Cards</strong><span>Goes towards event expenses &mdash; venue, tent, and so on.</span></div>
+            <div class="tier" data-tier="Food / Entertainment"><b>&nbsp;</b><strong>Food / Entertainment</strong><span>Your own services or products &mdash; food, snacks, entertainment.</span></div>
+            <div class="tier" data-tier="Raffle Prizes"><b>&nbsp;</b><strong>Raffle Prizes</strong><span>Prizes for the raffle, or one big prize &mdash; a TV, a tent.</span></div>
+          </div>
+          <div class="field">
+            <label>Sponsorship amount or value &mdash; $500 minimum, no maximum</label>
+            <div class="amounts" id="amounts"><button type="button" class="zone active" data-amt="500">$500</button><button type="button" class="zone" data-amt="750">$750</button><button type="button" class="zone" data-amt="1000">$1,000</button><button type="button" class="zone" data-amt="2500">$2,500</button><button type="button" class="zone" data-amt="other">Other</button></div>
+            <input name="amount" id="amountInput" type="number" min="500" step="50" value="500" style="max-width:220px;margin-top:8px" hidden>
           </div>
           <div class="fgrid">
             <div class="field"><label>Company</label><input name="company" required placeholder="Company name"></div>
             <div class="field"><label>Contact name</label><input name="name" required placeholder="Your name"></div>
+            <div class="field"><label>Title / role</label><input name="title" placeholder="Owner, Manager, Sales Rep…"></div>
             <div class="field"><label>Email</label><input name="email" type="email" required placeholder="you@company.com"></div>
-            <div class="field"><label>Phone</label><input name="phone" placeholder="(416) 000-0000"></div>
+            <div class="field"><label>Phone</label><input name="phone" type="tel" placeholder="(000) 000-0000"></div>
             <div class="field"><label>Website</label><input name="website" placeholder="www.yourcompany.ca"></div>
             <div class="field"><label>Instagram</label><input name="instagram" placeholder="@yourcompany"></div>
             <div class="field full"><label>Address</label><input name="address" placeholder="Street, City, Province"></div>
@@ -963,8 +971,11 @@
   document.getElementById('logoGrid').innerHTML=SPONSORS.map(function(x){ return '<a class="logo" href="'+x.url+'" target="_blank" rel="noopener" title="'+esc(x.n)+'"><img src="'+x.img+'" alt="'+esc(x.n)+'" loading="lazy"><span>'+esc(x.n)+'</span></a>'; }).join('');
 
   /* ===================== FORMS ===================== */
-  var tier='Cash / Gift Cards';
-  document.querySelectorAll('.tier').forEach(function(t){ t.addEventListener('click',function(){ document.querySelectorAll('.tier').forEach(function(x){ x.classList.remove('active'); }); t.classList.add('active'); tier=t.dataset.tier; }); });
+  var tiers=['Cash / Gift Cards'];
+  document.querySelectorAll('.tier').forEach(function(t){ t.addEventListener('click',function(){ var on=t.classList.toggle('active'); t.querySelector('b').innerHTML=on?'&#10003;':'&nbsp;'; tiers=Array.prototype.map.call(document.querySelectorAll('.tier.active'),function(x){ return x.dataset.tier; }); }); });
+  var amount=500, amtIn=document.getElementById('amountInput');
+  document.querySelectorAll('#amounts .zone').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('#amounts .zone').forEach(function(x){ x.classList.remove('active'); }); b.classList.add('active'); if(b.dataset.amt==='other'){ amtIn.hidden=false; amtIn.focus(); amount=Math.max(500,+amtIn.value||500); } else { amtIn.hidden=true; amount=+b.dataset.amt; amtIn.value=amount; } }); });
+  amtIn.addEventListener('input',function(){ amount=+amtIn.value||0; });
   var logoName='';
   document.getElementById('logoFile').addEventListener('change',function(e){ var f=e.target.files[0]; if(!f) return; logoName=f.name; document.getElementById('logoTxt').textContent=f.name+' attached'; var r=new FileReader(); r.onload=function(){ var im=document.getElementById('logoPreview'); im.src=r.result; im.hidden=false; }; r.readAsDataURL(f); });
   function fieldsOf(form){ var o={}; Array.prototype.forEach.call(form.elements,function(el){ if(el.name) o[el.name]=el.value.trim(); }); return o; }
@@ -978,7 +989,9 @@
   document.getElementById('sponsorForm').addEventListener('submit',function(e){
     e.preventDefault(); var f=fieldsOf(this);
     if(!f.company||!f.name||!f.email){ toast('Company, contact name and email are required.'); return; }
-    var body='SPONSORSHIP REQUEST \u2014 10th Annual Three Aces Picnic\n\nTier: $500 '+tier+'\nCompany: '+f.company+'\nContact: '+f.name+'\nEmail: '+f.email+'\nPhone: '+f.phone+'\nWebsite: '+f.website+'\nInstagram: '+f.instagram+'\nAddress: '+f.address+'\n\nAbout:\n'+f.about+'\n\nLogo: '+(logoName||'not attached');
+    if(!tiers.length){ toast('Pick at least one way to sponsor.'); return; }
+    if(amount<500){ toast('$500 is the minimum sponsorship.'); return; }
+    var body='SPONSORSHIP REQUEST \u2014 10th Annual Three Aces Picnic\n\nSponsorship: '+tiers.join(' + ')+'\nAmount / value: $'+amount.toLocaleString()+'\nCompany: '+f.company+'\nContact: '+f.name+(f.title?' ('+f.title+')':'')+'\nEmail: '+f.email+'\nPhone: '+f.phone+'\nWebsite: '+f.website+'\nInstagram: '+f.instagram+'\nAddress: '+f.address+'\n\nAbout:\n'+f.about+'\n\nLogo: '+(logoName||'not attached');
     showSent('sponsorSent','Sponsorship request \u2014 '+f.company,body);
   });
   document.getElementById('contactForm').addEventListener('submit',function(e){
