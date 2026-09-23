@@ -27,7 +27,7 @@
   .wrap{ max-width:1240px; margin:0 auto; padding-inline:24px; }
   .display{ font-family:var(--display); font-weight:400; letter-spacing:.02em; line-height:.95; text-wrap:balance; }
   .eyebrow{ display:inline-flex; align-items:center; gap:10px; font-size:12px; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); }
-  .eyebrow::before{ content:""; width:28px; height:1px; background:var(--gold); }
+  .eyebrow::before{ display:none; }
   .muted{ color:var(--muted); }
   .tricolor{ display:flex; height:3px; } .tricolor i{ flex:1; } .tricolor i:nth-child(1){ background:var(--green);} .tricolor i:nth-child(2){ background:#f3efe6;} .tricolor i:nth-child(3){ background:var(--red);}
   .btn{ display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:15px 26px; font-size:13px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; border:1px solid var(--text); background:transparent; color:var(--text); transition:background .25s,color .25s,transform .25s; }
@@ -211,7 +211,7 @@
 
   /* food drive */
   .fd{ position:relative; overflow:hidden; }
-  .fd .bg{ position:absolute; inset:0; background:url(fd_santa.jpg) center/cover no-repeat; opacity:.28; }
+  .fd .bg{ position:absolute; inset:0; background:url(fd_santa.jpg) center 30%/cover no-repeat; opacity:.28; }
   .fd .shade{ position:absolute; inset:0; background:linear-gradient(90deg,#070707 0%,rgba(7,7,7,.92) 45%,rgba(7,7,7,.55) 100%); }
   .fd .inner{ position:relative; display:grid; grid-template-columns:1.1fr .9fr; gap:50px; align-items:center; }
   .fd h2{ font-size:clamp(40px,5.6vw,68px); margin:12px 0 22px; }
@@ -220,9 +220,9 @@
   .bignum div b{ display:block; font-family:var(--display); font-size:64px; color:var(--gold); line-height:1; }
   .bignum div span{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
   .fd .photos{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .fd .photos div{ height:220px; overflow:hidden; border:1px solid var(--line); }
-  .fd .photos div:first-child{ grid-column:span 2; height:260px; }
-  .fd .photos img{ width:100%; height:100%; object-fit:cover; object-position:50% 20%; }
+  .fd .photos div{ height:300px; overflow:hidden; border:1px solid var(--line); }
+  .fd .photos div:first-child{ grid-column:span 2; height:300px; }
+  .fd .photos img{ width:100%; height:100%; object-fit:cover; object-position:50% 30%; }
   .steps{ display:flex; flex-direction:column; gap:0; margin-top:26px; border-top:1px solid var(--line); }
   .steps div{ display:grid; grid-template-columns:44px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); align-items:baseline; }
   .steps b{ font-family:var(--display); font-size:26px; color:var(--gold); }
@@ -470,6 +470,7 @@
         <div>
           <p>One Sunday every summer at Heart Lake Conservation Area in Brampton. Pasta, pizza, bocce, a raffle, a live performer, and the pool and splash pad for the kids. Everything raised through clothing and the raffle goes straight back into the picnic and the food drive &mdash; 100%. Nine down; the tenth is going to be the big one.</p>
           <div class="datebox"><b>2027</b><span>Summer 2027 &middot; Heart Lake, Birchview #1<br>Date to be announced</span></div>
+          <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;"><a class="btn btn-gold btn-sm" href="#sponsor">Become a Sponsor</a><a class="btn btn-sm" href="#sponsors" data-view="sponsors">Our Sponsors</a></div>
         </div>
       </div>
       <div class="mosaic" data-reveal>
@@ -482,7 +483,7 @@
         <div><img src="g_plaque.jpg" alt="Presenting a sponsor plaque"></div>
       </div>
       <div class="facts" data-reveal>
-        <div class="fact"><svg viewBox="0 0 24 24"><path d="M4 12h16M6 12a6 6 0 0012 0M8 6l1 3M16 6l-1 3M12 4v5"/></svg><b>THE FOOD</b><span>Pasta by Multi Pasta, pizza by Bolton Pizza Panini, espresso and sweets at 11, lunch at 1.</span></div>
+        <div class="fact"><svg viewBox="0 0 24 24"><path d="M4 12h16M6 12a6 6 0 0012 0M8 6l1 3M16 6l-1 3M12 4v5"/></svg><b>THE FOOD</b><span>Pizza by Bolton Pizza Panini and pasta by Multi Pasta, with espresso and sweets.</span></div>
         <div class="fact"><svg viewBox="0 0 24 24"><circle cx="8" cy="14" r="4"/><circle cx="17" cy="9" r="3"/><path d="M12 20h9"/></svg><b>BOCCE TOURNAMENT</b><span>Sign up on the day. Winners take home the trophies.</span></div>
         <div class="fact"><svg viewBox="0 0 24 24"><path d="M4 8h16v10H4zM4 8l2-4h12l2 4M9 12h6"/></svg><b>RAFFLE &amp; PRIZES</b><span>Tickets sold all afternoon. Every dollar funds next year&rsquo;s picnic and the food drive.</span></div>
         <div class="fact"><svg viewBox="0 0 24 24"><path d="M6 4l6 4 6-4v14l-6 2-6-2z"/></svg><b>THE CLOTHING STATION</b><span>An exclusive picnic-colour tee every year, limited sizes, plus one-day-only deals on the rest.</span></div>
@@ -515,9 +516,9 @@
         </div>
       </div>
       <div class="photos" data-reveal>
-        <div><img src="fd_santa.jpg" alt="Members with Santa at the December hand-out"></div>
-        <div><img src="fd_truck.jpg" alt="Santa arriving"></div>
-        <div><img src="fd_boxes.jpg" alt="Members at the food bank"></div>
+        <div><img src="fd_santa.jpg" alt="The club with Santa at the December hand-out"></div>
+        <div><img src="fd_truck.jpg" alt="Santa with two of the kids"></div>
+        <div><img src="fd_boxes.jpg" alt="Members at the food bank tent"></div>
       </div>
     </div>
   </section>
@@ -682,7 +683,7 @@
       </div>
     </div>
     <div class="tricolor"><i></i><i></i><i></i></div>
-    <div class="ft-bottom"><span>&copy; 2026 Three Aces Italian Canadian Cultural Club</span><span>Annual Picnic &middot; Heart Lake Conservation Area, Brampton, ON</span></div>
+    <div class="ft-bottom"><span>&copy; 2026 Three Aces Italian Canadian Cultural Club</span><span>Toronto, Ontario</span></div>
   </div>
 </footer>
 
@@ -693,7 +694,10 @@
   'use strict';
   /* ===================== CONFIG ===================== */
   var GOFUNDME_URL = '';   // paste the 2026 GoFundMe link here when it goes live
-  var SHIP = { CA:12, US:22, INTL:38 };
+  /* Shipping by weight. Base covers the first 0.5 kg; each extra 0.5 kg adds the step.
+     Roughly Canada Post from Toronto. One tee ~0.25 kg, a hoodie ~0.7 kg. */
+  var SHIP = { CA:{base:12,step:4}, US:{base:22,step:7}, INTL:{base:38,step:12} };
+  function shipCost(zone,kg){ var r=SHIP[zone]; var extra=Math.max(0,Math.ceil((kg-0.5)/0.5)); return r.base+extra*r.step; }
 
   /* ===================== INVENTORY =====================
      LIVE_ITEMS is a copy of /threeaces/items from the Club Manager's Firebase
@@ -866,7 +870,7 @@
         '<div class="addrow"><div class="qty"><button id="qm">−</button><span id="qv">'+sel.qty+'</span><button id="qp">+</button></div><button class="btn btn-gold" id="addBtn"'+(st===0?' disabled':'')+'>'+(total===0?'Sold out':'Add to cart')+'</button></div>'+
         '<div class="fs-box"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span><b>Final sale.</b> No returns or exchanges on club merchandise. Check the size chart and the stock line above before you add it.</span></div>'+
         '<div class="details">'+chart+
-          '<details><summary>Shipping &amp; pickup</summary><div class="body">Ships from Toronto, ON. Rates are by destination and weight (this item is about '+p.weight+' kg): Canada $'+SHIP.CA+', United States $'+SHIP.US+', international $'+SHIP.INTL+' per order. Free local pickup in Toronto — choose it at checkout.</div></details>'+
+          '<details><summary>Shipping &amp; pickup</summary><div class="body">Ships from Toronto, ON. Rates are by destination and total weight (this item is about '+p.weight+' kg). Up to 0.5 kg: Canada $'+SHIP.CA.base+', United States $'+SHIP.US.base+', international $'+SHIP.INTL.base+'; each extra 0.5 kg adds $'+SHIP.CA.step+' / $'+SHIP.US.step+' / $'+SHIP.INTL.step+'. Free local pickup in Toronto — choose it at checkout.</div></details>'+
           '<details><summary>Where the money goes</summary><div class="body">Every dollar of profit from this item goes to the Three Aces club fund — the Annual Picnic and the Christmas Food Drive. Nobody takes a cut.</div></details>'+
         '</div>'+
       '</div>';
@@ -899,12 +903,12 @@
       return '<div class="line">'+th+'<div><div class="nm">'+esc(p.name).toUpperCase()+'</div><div class="sub">'+esc(c.n)+' · Size '+esc(l.size)+' · '+money(unit)+' each</div><div class="fs">Final sale</div><button class="rm" data-rm="'+i+'">Remove</button></div>'+
              '<div class="qty"><button data-dq="'+i+'">−</button><span>'+l.qty+'</span><button data-iq="'+i+'">+</button></div><div class="amt">'+money(amt)+'</div></div>';
     }).join('');
-    var ship = pickup ? 0 : SHIP[zone];
+    var ship = pickup ? 0 : shipCost(zone,w);
     var zoneName = pickup ? 'Pickup in Toronto' : ({CA:'Canada',US:'United States',INTL:'International'})[zone];
     root.innerHTML =
       '<div><div class="lines">'+lines+'</div>'+
-        '<div class="shipbox"><b>Where are we shipping?</b><div class="muted" style="font-size:13px;margin-top:4px">Order weight about '+w.toFixed(2)+' kg. Rates are per order.</div>'+
-          '<div class="zones"><button class="zone'+(zone==='CA'&&!pickup?' active':'')+'" data-zone="CA">Canada — $'+SHIP.CA+'</button><button class="zone'+(zone==='US'&&!pickup?' active':'')+'" data-zone="US">United States — $'+SHIP.US+'</button><button class="zone'+(zone==='INTL'&&!pickup?' active':'')+'" data-zone="INTL">International — $'+SHIP.INTL+'</button></div>'+
+        '<div class="shipbox"><b>Where are we shipping?</b><div class="muted" style="font-size:13px;margin-top:4px">Order weight about '+w.toFixed(2)+' kg. The first 0.5 kg is the base rate; each extra 0.5 kg adds a step.</div>'+
+          '<div class="zones"><button class="zone'+(zone==='CA'&&!pickup?' active':'')+'" data-zone="CA">Canada — $'+shipCost('CA',w)+'</button><button class="zone'+(zone==='US'&&!pickup?' active':'')+'" data-zone="US">United States — $'+shipCost('US',w)+'</button><button class="zone'+(zone==='INTL'&&!pickup?' active':'')+'" data-zone="INTL">International — $'+shipCost('INTL',w)+'</button></div>'+
           '<label class="chk"><input type="checkbox" id="pickupChk"'+(pickup?' checked':'')+'><span>Pick up in Toronto instead — free, no shipping charge. We’ll message you to arrange it.</span></label>'+
         '</div></div>'+
       '<div class="summary"><h3 class="display">ORDER SUMMARY</h3>'+
