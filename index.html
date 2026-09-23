@@ -86,6 +86,7 @@
 
   /* ---------- views ---------- */
   .view{ min-height:60vh; }
+  .view [id]{ scroll-margin-top:96px; }
   [data-reveal]{ transform:translateY(22px); transition:transform .9s cubic-bezier(.2,.8,.2,1); }
   [data-reveal].in, .no-io [data-reveal]{ transform:none; }
 
@@ -172,8 +173,8 @@
   .fact b{ font-family:var(--display); font-size:22px; letter-spacing:.04em; }
   .fact span{ font-size:13.5px; color:var(--muted); }
   .sponsors{ margin-top:44px; padding-top:30px; border-top:1px solid var(--line); }
-  .logos{ display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
-  .logo{ display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid var(--line2); padding:18px; height:120px; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; position:relative; }
+  .logos{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; }
+  .logo{ flex:0 0 calc(20% - 10px); min-width:150px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid var(--line2); padding:18px 22px; height:130px; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; position:relative; }
   .logo:hover{ transform:translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.5); }
   .logo img{ max-width:100%; max-height:100%; object-fit:contain; }
   .logo span{ position:absolute; left:0; right:0; bottom:0; background:rgba(7,7,7,.85); color:var(--text); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; text-align:center; padding:6px 8px; opacity:0; transition:opacity .25s; }
@@ -202,7 +203,7 @@
   .contact-list{ display:flex; flex-direction:column; gap:22px; }
   .contact-list b{ display:block; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
   .contact-list span{ font-size:18px; }
-  @media (max-width:860px){ .contact-grid{ grid-template-columns:1fr; } .fgrid{ grid-template-columns:1fr; } .field .full{ grid-column:auto; } .tiers{ grid-template-columns:1fr; } }
+  @media (max-width:860px){ .logo{ flex-basis:calc(33.33% - 8px); } .contact-grid{ grid-template-columns:1fr; } .fgrid{ grid-template-columns:1fr; } .field .full{ grid-column:auto; } .tiers{ grid-template-columns:1fr; } }
   .datebox{ display:inline-flex; align-items:center; gap:18px; border:1px solid rgba(214,178,94,.5); padding:14px 20px; margin-top:26px; }
   .datebox b{ font-family:var(--display); font-size:34px; color:var(--gold); line-height:1; }
   .datebox span{ font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); line-height:1.5; }
@@ -957,7 +958,7 @@
     {n:'Funtimes Event Rentals',img:'sp-funtimes.jpg',url:'https://www.funtimeseventrentals.ca',ig:'funtimeseventrentals'},
     {n:'Belvedere Property Management & Inspections',img:'sp-belvedere.jpg',url:'https://www.na-ahi.org',ig:'belvedere_properties'},
     {n:'Joseph & Mike\u2019s Barber Shop',img:'sp-josephmike.jpg',url:'https://www.josephandmikesbarbershop.com',ig:'josephandmikes_.barbershop1966'},
-    {n:'Tony & Adriana Puzzo \u2014 Team Puzzo',img:'sp-puzzo.jpg',url:'https://www.teampuzzo.ca'}
+    {n:'Tony & Adriana Puzzo',img:'sp-puzzo.jpg',url:'https://www.teampuzzo.ca'}
   ];
   document.getElementById('logoGrid').innerHTML=SPONSORS.map(function(x){ return '<a class="logo" href="'+x.url+'" target="_blank" rel="noopener" title="'+esc(x.n)+'"><img src="'+x.img+'" alt="'+esc(x.n)+'" loading="lazy"><span>'+esc(x.n)+'</span></a>'; }).join('');
 
