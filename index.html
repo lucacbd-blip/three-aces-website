@@ -167,6 +167,7 @@
   @media (max-width:760px){ .mosaic{ grid-template-columns:1fr 1fr; grid-template-rows:220px; grid-auto-rows:170px; } .mosaic div:first-child{ grid-column:span 2; grid-row:span 1; } }
   .facts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:44px; }
   .fact{ background:var(--bg2); padding:24px 22px; display:flex; flex-direction:column; gap:8px; }
+  a.fact{ background:var(--bg); transition:background .25s; } a.fact:hover{ background:var(--panel); }
   .fact svg{ width:26px; height:26px; stroke:var(--gold); fill:none; stroke-width:1.6; }
   .fact b{ font-family:var(--display); font-size:22px; letter-spacing:.04em; }
   .fact span{ font-size:13.5px; color:var(--muted); }
@@ -369,11 +370,11 @@
     <nav class="main" id="mainnav">
       <a href="#home" class="navlink" data-view="home">Home</a>
       <a href="#shop" class="navlink" data-view="shop">Shop</a>
-      <a href="#story" class="navlink" data-nav="home" data-scroll="story">Who We Are</a>
-      <a href="#picnic" class="navlink" data-nav="home" data-scroll="picnic">Picnic</a>
-      <a href="#fooddrive" class="navlink" data-nav="home" data-scroll="fooddrive">Food Drive</a>
-      <a href="#sponsors" class="navlink" data-nav="home" data-scroll="sponsors">Sponsors</a>
-      <a href="#contact" class="navlink" data-nav="home" data-scroll="contact">Contact</a>
+      <a href="#story" class="navlink" data-view="story">Who We Are</a>
+      <a href="#picnic" class="navlink" data-view="picnic">Picnic</a>
+      <a href="#fooddrive" class="navlink" data-view="fooddrive">Food Drive</a>
+      <a href="#sponsors" class="navlink" data-view="sponsors">Sponsors</a>
+      <a href="#contact" class="navlink" data-view="contact">Contact</a>
     </nav>
     <div class="hdr-actions">
       <a href="#cart" class="cartbtn" data-view="cart">
@@ -398,7 +399,7 @@
       <p>An Italian Canadian cultural club founded in 2013 to keep the traditions alive and keep families together. Everyone is welcome. Every dollar from the gear we sell goes back into the club and the community &mdash; the Annual Picnic, the Christmas Food Drive, and the people who need a hand.</p>
       <div class="ctas">
         <a class="btn btn-fill" href="#shop" data-view="shop">Shop the Gear</a>
-        <a class="btn" href="#story" data-nav="home" data-scroll="story">Our Story</a>
+        <a class="btn" href="#story" data-view="story">Our Story</a>
       </div>
     </div>
   </div>
@@ -420,13 +421,32 @@
   </section>
 
   <!-- story -->
-  <section class="blk" id="story" style="padding-top:20px;">
+  <section class="blk" style="padding-top:0;">
+    <div class="wrap">
+      <div class="facts" data-reveal style="margin-top:0;">
+        <a class="fact" href="#story" data-view="story"><b>WHO WE ARE</b><span>Founded in Toronto in 2013 to keep the Italian traditions alive and families together. Everybody is welcome.</span><span style="color:var(--gold);margin-top:6px;">Read our story &rarr;</span></a>
+        <a class="fact" href="#picnic" data-view="picnic"><b>THE ANNUAL PICNIC</b><span>Nine down. The 10th Annual Picnic is summer 2027 at Heart Lake.</span><span style="color:var(--gold);margin-top:6px;">See the picnic &rarr;</span></a>
+        <a class="fact" href="#fooddrive" data-view="fooddrive"><b>CHRISTMAS FOOD DRIVE</b><span>$4,517 raised last year, 100% turned into grocery gift cards at St. Philip Neri.</span><span style="color:var(--gold);margin-top:6px;">The food drive &rarr;</span></a>
+        <a class="fact" href="#sponsors" data-view="sponsors"><b>OUR SPONSORS</b><span>The businesses that make the picnic possible &mdash; and how to become one.</span><span style="color:var(--gold);margin-top:6px;">Meet the sponsors &rarr;</span></a>
+      </div>
+    </div>
+  </section>
+  <div class="insta">
+    <div class="wrap row">
+      <div><h3 class="display">FOLLOW THE CLUB</h3><p>Picnic footage, food drive updates and new drops &mdash; tag <b style="color:var(--text)">@three_aces_italian</b>.</p></div>
+      <a class="btn" href="https://www.instagram.com/three_aces_italian/" target="_blank" rel="noopener">@three_aces_italian</a>
+    </div>
+  </div>
+</section>
+
+<section id="view-story" class="view" hidden>
+  <section class="blk" id="story">
     <div class="wrap story">
       <div data-reveal>
         <span class="eyebrow">Who We Are</span>
         <h2 class="display">KEEPING THE<br>TRADITIONS ALIVE</h2>
-        <p>Three Aces was founded in Toronto in 2013 by a group of friends who saw the traditions they grew up with starting to slip away &mdash; the Sunday lunches, the picnics, the whole family in one place. We started the club to keep them alive, and to keep families and their children together the way our parents and grandparents kept us together.</p>
-        <p>You don&rsquo;t have to be Italian. Everybody is welcome at our table. The three cards on the crest are the Italian <em>bastoni</em>, <em>coppe</em> and <em>spade</em>; the three stars are the flag we came from. We are volunteer-run &mdash; nobody draws a salary, and every dollar from the gear you buy here goes back into the picnic, the food drive and the community.</p>
+        <p>Three Aces Italian Canadian Cultural Club was founded in Toronto in 2013 by a group of friends who saw the traditions they grew up with starting to slip away &mdash; the Sunday lunches, the picnics, the whole family in one place. We started the club to keep them alive, and to keep families and their children together the way our parents and grandparents kept us together.</p>
+        <p>You don&rsquo;t have to be Italian. Everybody is welcome at our table. We are volunteer-run &mdash; nobody draws a salary, and every dollar from the gear you buy here goes back into the picnic, the food drive and the community.</p>
         <div class="stats">
           <div class="stat"><b>2013</b><span>Founded in Toronto</span></div>
           <div class="stat"><b>$4,517</b><span>Raised last Christmas</span></div>
@@ -438,6 +458,9 @@
   </section>
 
   <!-- picnic -->
+</section>
+
+<section id="view-picnic" class="view" hidden>
   <section class="blk picnic" id="picnic">
     <div class="wrap">
       <div class="sec-head" data-reveal>
@@ -462,37 +485,30 @@
         <div class="fact"><svg viewBox="0 0 24 24"><path d="M4 8h16v10H4zM4 8l2-4h12l2 4M9 12h6"/></svg><b>RAFFLE &amp; PRIZES</b><span>Tickets sold all afternoon. Every dollar funds next year&rsquo;s picnic and the food drive.</span></div>
         <div class="fact"><svg viewBox="0 0 24 24"><path d="M6 4l6 4 6-4v14l-6 2-6-2z"/></svg><b>THE CLOTHING STATION</b><span>An exclusive picnic-colour tee every year, limited sizes, plus one-day-only deals on the rest.</span></div>
       </div>
-      <div class="sponsors" data-reveal id="sponsors">
-        <div class="sec-head" style="margin-bottom:26px;align-items:flex-end;">
-          <div><span class="eyebrow">Our Sponsors</span><h3 class="display" style="font-size:clamp(30px,4.5vw,52px);margin:10px 0 0;">THANK YOU TO OUR<br>2026 PICNIC SPONSORS</h3></div>
-          <p style="max-width:460px;">Every sponsor gets an honourable mention at the picnic, their logo on the invitation, a custom plaque, and a spot on the sponsor roll all day long. Tap a logo to visit them &mdash; and please leave them a 5-star Google review.</p>
-        </div>
-        <div class="logos" id="logoGrid"></div>
-        <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;"><a class="btn btn-gold" href="#sponsor" data-nav="home" data-scroll="sponsor">Become a Sponsor</a></div>
-      </div>
     </div>
   </section>
+</section>
 
-  <!-- food drive -->
+<section id="view-fooddrive" class="view" hidden>
   <section class="blk fd" id="fooddrive">
     <div class="bg"></div><div class="shade"></div>
     <div class="wrap inner">
       <div data-reveal>
         <span class="eyebrow">Christmas Food Drive</span>
         <h2 class="display">6TH ANNUAL<br>CHRISTMAS FOOD DRIVE</h2>
-        <p>A couple of weeks before Christmas, Three Aces goes to the St. Philip Neri food bank and hands out grocery gift cards to families who need them. 100% of what comes in goes back into the community &mdash; the gift cards and the cost of the day itself. Nobody at Three Aces takes a dollar.</p>
+        <p>Every December, Three Aces goes to the St. Philip Neri food bank in Toronto and hands out grocery gift cards to families who need them. 100% of what comes in goes back into the community &mdash; the gift cards and the cost of the day itself. Nobody at Three Aces takes a dollar.</p>
         <div class="bignum">
           <div><b>$4,517</b><span>Raised in 2025</span></div>
           <div><b>100%</b><span>Goes back to the community</span></div>
           <div><b>0</b><span>Kept by the club</span></div>
         </div>
         <div class="steps">
-          <div><b>01</b><span>We launch the GoFundMe in November and Charlie pushes it on Instagram.</span></div>
+          <div><b>01</b><span>We launch the GoFundMe in November and the whole club gets behind it.</span></div>
           <div><b>02</b><span>Every dollar raised goes into grocery gift cards and the hand-out day.</span></div>
-          <div><b>03</b><span>We hand them out in person at St. Philip Neri, two weeks before Christmas.</span></div>
+          <div><b>03</b><span>We hand them out in person at the St. Philip Neri food bank in Toronto, before Christmas.</span></div>
         </div>
         <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
-          <a class="btn btn-gold" id="donateBtn" href="#fooddrive" data-nav="home" data-scroll="fooddrive">Donate on GoFundMe</a>
+          <a class="btn btn-gold" id="donateBtn" href="#fooddrive" data-view="fooddrive">Donate on GoFundMe</a>
           <span class="muted" id="donateNote" style="font-size:13px;">2026 campaign launches in November</span>
         </div>
       </div>
@@ -505,6 +521,22 @@
   </section>
 
   <!-- become a sponsor -->
+</section>
+
+<section id="view-sponsors" class="view" hidden>
+  <section class="blk" style="padding-bottom:40px;">
+    <div class="wrap">
+      <div class="sponsors" data-reveal id="sponsors" style="margin-top:20px;padding-top:0;border-top:none;">
+        <div class="sec-head" style="margin-bottom:26px;align-items:flex-end;">
+          <div><span class="eyebrow">Our Sponsors</span><h1 class="display" style="font-size:clamp(40px,6vw,74px);margin:12px 0 0;">THANK YOU TO OUR<br>2026 PICNIC SPONSORS</h1></div>
+          <p style="max-width:460px;">Every sponsor gets an honourable mention at the picnic, their logo on the invitation, a custom plaque, and a spot on the sponsor roll all day long. Tap a logo to visit them &mdash; and please leave them a 5-star Google review.</p>
+        </div>
+        <div class="logos" id="logoGrid"></div>
+        <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;"><a class="btn btn-gold" href="#sponsor">Become a Sponsor</a></div>
+      </div>
+    </div>
+    </div>
+  </section>
   <section class="blk" id="sponsor" style="border-top:1px solid var(--line);">
     <div class="wrap">
       <div class="sec-head" data-reveal>
@@ -549,6 +581,9 @@
   </section>
 
   <!-- contact -->
+</section>
+
+<section id="view-contact" class="view" hidden>
   <section class="blk" id="contact" style="background:var(--bg2);border-top:1px solid var(--line);">
     <div class="wrap">
       <div class="sec-head" data-reveal>
@@ -561,7 +596,7 @@
           <div><b>Instagram</b><span><a href="https://www.instagram.com/three_aces_italian/" target="_blank" rel="noopener" style="text-decoration:underline">@three_aces_italian</a></span></div>
           <div><b>Based in</b><span>Toronto, Ontario</span></div>
           <div><b>Annual Picnic</b><span>Heart Lake Conservation Area, Brampton</span></div>
-          <div><b>Christmas Food Drive</b><span>St. Philip Neri food bank</span></div>
+          <div><b>Christmas Food Drive</b><span>St. Philip Neri food bank, Toronto</span></div>
         </div>
         <form class="formblk" id="contactForm" novalidate>
           <div class="fgrid">
@@ -577,13 +612,8 @@
     </div>
   </section>
 
-  <div class="insta">
-    <div class="wrap row">
-      <div><h3 class="display">FOLLOW THE CLUB</h3><p>Picnic footage, food drive updates and new drops &mdash; tag <b style="color:var(--text)">@three_aces_italian</b>.</p></div>
-      <a class="btn" href="https://www.instagram.com/three_aces_italian/" target="_blank" rel="noopener">@three_aces_italian</a>
-    </div>
-  </div>
 </section>
+
 
 <!-- ================= SHOP ================= -->
 <section id="view-shop" class="view" hidden>
@@ -637,9 +667,9 @@
         <p class="final-note" style="margin-top:18px;">All merchandise is final sale. Proceeds support the Annual Picnic, the Christmas Food Drive and club events. Volunteer-run in Toronto, Ontario.</p>
       </div>
       <div class="ft-cols">
-        <div class="ft-col"><span class="hd">Club</span><a href="#story" data-nav="home" data-scroll="story">Who We Are</a><a href="#picnic" data-nav="home" data-scroll="picnic">Annual Picnic</a><a href="#fooddrive" data-nav="home" data-scroll="fooddrive">Food Drive</a><a href="#sponsors" data-nav="home" data-scroll="sponsors">Sponsors</a><a href="#sponsor" data-nav="home" data-scroll="sponsor">Become a Sponsor</a></div>
+        <div class="ft-col"><span class="hd">Club</span><a href="#story" data-view="story">Who We Are</a><a href="#picnic" data-view="picnic">Annual Picnic</a><a href="#fooddrive" data-view="fooddrive">Food Drive</a><a href="#sponsors" data-view="sponsors">Sponsors</a><a href="#sponsor">Become a Sponsor</a></div>
         <div class="ft-col"><span class="hd">Shop</span><a href="#shop" data-view="shop">All Merchandise</a><a href="#cart" data-view="cart">Cart &amp; Shipping</a></div>
-        <div class="ft-col"><span class="hd">Contact</span><a href="#contact" data-nav="home" data-scroll="contact">Contact Us</a><span>info@threeaces.ca</span><a href="https://www.instagram.com/three_aces_italian/" target="_blank" rel="noopener">@three_aces_italian</a></div>
+        <div class="ft-col"><span class="hd">Contact</span><a href="#contact" data-view="contact">Contact Us</a><span>info@threeaces.ca</span><a href="https://www.instagram.com/three_aces_italian/" target="_blank" rel="noopener">@three_aces_italian</a></div>
       </div>
     </div>
     <div class="tricolor"><i></i><i></i><i></i></div>
@@ -738,12 +768,12 @@
   }
 
   /* ===================== VIEWS / ROUTING ===================== */
-  var VIEWS=['home','shop','product','cart','confirm'];
+  var VIEWS=['home','shop','product','cart','confirm','story','picnic','fooddrive','sponsors','contact'];
   var currentProduct = P[0].id;
   function showView(name, scrollTo){
     if(VIEWS.indexOf(name)===-1) name='home';
     VIEWS.forEach(function(v){ var el=document.getElementById('view-'+v); if(el) el.hidden=(v!==name); });
-    document.querySelectorAll('.navlink').forEach(function(a){ a.classList.toggle('active', a.dataset.view===name || (name==='home' && a.dataset.scroll===scrollTo)); });
+    document.querySelectorAll('.navlink').forEach(function(a){ a.classList.toggle('active', a.dataset.view===name); });
     document.getElementById('mainnav').classList.remove('open');
     if(name==='shop') renderShop();
     if(name==='product') renderProduct();
@@ -753,8 +783,8 @@
   }
   function syncFromHash(){
     var h=(location.hash||'#home').slice(1);
-    if(h==='shop'||h==='product'||h==='cart'||h==='confirm') showView(h);
-    else if(h==='story'||h==='picnic'||h==='fooddrive'||h==='sponsors'||h==='sponsor'||h==='contact') showView('home',h);
+    if(VIEWS.indexOf(h)!==-1) showView(h);
+    else if(h==='sponsor') showView('sponsors','sponsor');
     else showView('home');
   }
   window.addEventListener('hashchange', syncFromHash);
