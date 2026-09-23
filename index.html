@@ -1015,22 +1015,14 @@
   renderFeatured(); updateCount();
 
   /* ===================== LIVE DATA FROM THE CLUB MANAGER =====================
-     Same Firebase project the phones use. The site signs in anonymously and only
-     ever reads: /threeaces/items and /threeaces/site, plus photos from the file
-     store. If anything fails, the copy baked into this file above is what shows. */
-  var FB = { key:'AIzaSyCLlwbfE4ZilKtY5AakOUOl_h7_0uP-VQw', db:'https://three-aces-default-rtdb.firebaseio.com' };
-  var fbTok=null, fileCache={};
-  function fbAuth(){
-    if(fbTok) return Promise.resolve(fbTok);
-    var saved=null; try{ saved=JSON.parse(localStorage.getItem('ta_site_auth')||'null'); }catch(e){}
-    var p = saved&&saved.r
-      ? fetch('https://securetoken.googleapis.com/v1/token?key='+FB.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grant_type:'refresh_token',refresh_token:saved.r})}).then(function(r){ return r.json(); }).then(function(j){ if(!j.id_token) throw 0; try{ localStorage.setItem('ta_site_auth',JSON.stringify({r:j.refresh_token||saved.r})); }catch(e){} return j.id_token; })
-      : Promise.reject();
-    return p.catch(function(){ return fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+FB.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({returnSecureToken:true})}).then(function(r){ return r.json(); }).then(function(j){ if(!j.idToken) throw new Error('auth'); try{ localStorage.setItem('ta_site_auth',JSON.stringify({r:j.refreshToken})); }catch(e){} return j.idToken; }); })
-      .then(function(t){ fbTok=t; return t; });
-  }
-  function fbGet(path){ return fbAuth().then(function(t){ return fetch(FB.db+'/'+path+'.json?auth='+encodeURIComponent(t),{cache:'no-store'}); }).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
-  function loadFile(id){ if(fileCache[id]) return fileCache[id]; fileCache[id]=fbGet('threeacesFiles/'+encodeURIComponent(id)).then(function(f){ return (f&&f.data)||''; }).catch(function(){ return ''; }); return fileCache[id]; }
+     The Club Manager keeps a public, cost-free copy of the store at /threeacesPublic
+     (and website photos at /threeacesPublicFiles). This page reads only those two
+     nodes, with no key and no sign-in. If they can't be reached, the copy baked into
+     this file above is what shows. */
+  var FB = { db:'https://three-aces-default-rtdb.firebaseio.com' };
+  var fileCache={};
+  function fbGet(path){ return fetch(FB.db+'/'+path+'.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
+  function loadFile(id){ if(fileCache[id]) return fileCache[id]; fileCache[id]=fbGet('threeacesPublicFiles/'+encodeURIComponent(id)).then(function(f){ return (f&&f.data)||''; }).catch(function(){ return ''; }); return fileCache[id]; }
   function hydrateImages(){ document.querySelectorAll('img[data-file]').forEach(function(im){ if(im.dataset.done) return; im.dataset.done='1'; loadFile(im.dataset.file).then(function(d){ if(d) im.src=d; }); }); }
   function ord(n){ n=+n||0; var s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
   function applySite(c){
@@ -1056,8 +1048,8 @@
     hydrateImages();
   }
   function goLive(){
-    Promise.all([fbGet('threeaces/items'), fbGet('threeaces/site').catch(function(){ return null; })]).then(function(res){
-      var items=res[0], site=res[1];
+    fbGet('threeacesPublic').then(function(pub){
+      var items=pub&&pub.items, site=pub&&pub.site;
       if(items && Object.keys(items).length){
         P=buildProducts(items);
         cart=cart.filter(function(l){ var p=byId(l.pid); return p && p.colours[l.ci] && p.colours[l.ci].sizes[l.size]; }); saveCart(); updateCount();
