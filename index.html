@@ -19,6 +19,7 @@
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
+  [hidden]{ display:none !important; }
   body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--body); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
   body.lock{ overflow:hidden; }
   a{ color:inherit; text-decoration:none; }
@@ -184,8 +185,10 @@
   .fgrid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
   .field{ display:flex; flex-direction:column; gap:6px; }
   .field label{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
-  .field input,.field select,.field textarea{ background:var(--bg); color:var(--text); border:1px solid var(--line2); padding:12px 14px; font-family:inherit; font-size:15px; width:100%; }
-  .field input:focus,.field select:focus,.field textarea:focus{ outline:none; border-color:var(--gold); }
+  .field input,.field select,.field textarea{ background:#ffffff; color:#141414; border:1px solid #cfc9bd; padding:12px 14px; font-family:inherit; font-size:15px; width:100%; }
+  .field input:focus,.field select:focus,.field textarea:focus{ outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(214,178,94,.25); }
+  .field input::placeholder,.field textarea::placeholder{ color:#8a8478; }
+  .field select{ color-scheme:light; }
   .field textarea{ min-height:110px; resize:vertical; }
   .field .full{ grid-column:span 2; }
   .tiers{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
@@ -223,6 +226,7 @@
   .fd .photos div{ height:300px; overflow:hidden; border:1px solid var(--line); }
   .fd .photos div:first-child{ grid-column:span 2; height:300px; }
   .fd .photos img{ width:100%; height:100%; object-fit:cover; object-position:50% 30%; }
+  .fd .photos div:nth-child(2) img{ object-fit:contain; background:#000; }
   .steps{ display:flex; flex-direction:column; gap:0; margin-top:26px; border-top:1px solid var(--line); }
   .steps div{ display:grid; grid-template-columns:44px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); align-items:baseline; }
   .steps b{ font-family:var(--display); font-size:26px; color:var(--gold); }
@@ -605,8 +609,6 @@
           <div><b>Email</b><span>info@threeaces.ca</span></div>
           <div><b>Instagram</b><span><a href="https://www.instagram.com/three_aces_italian/" target="_blank" rel="noopener" style="text-decoration:underline">@three_aces_italian</a></span></div>
           <div><b>Based in</b><span>Toronto, Ontario</span></div>
-          <div><b>Annual Picnic</b><span>Heart Lake Conservation Area, Brampton</span></div>
-          <div><b>Christmas Food Drive</b><span>St. Philip Neri food bank, Toronto</span></div>
         </div>
         <form class="formblk" id="contactForm" novalidate>
           <div class="fgrid">
@@ -696,8 +698,9 @@
   var GOFUNDME_URL = '';   // paste the 2026 GoFundMe link here when it goes live
   /* Shipping by weight. Base covers the first 0.5 kg; each extra 0.5 kg adds the step.
      Roughly Canada Post from Toronto. One tee ~0.25 kg, a hoodie ~0.7 kg. */
-  var SHIP = { CA:{base:12,step:4}, US:{base:22,step:7}, INTL:{base:38,step:12} };
-  function shipCost(zone,kg){ var r=SHIP[zone]; var extra=Math.max(0,Math.ceil((kg-0.5)/0.5)); return r.base+extra*r.step; }
+  var SHIP = { CA:{base:12,step:4,label:'Canada'}, US:{base:22,step:7,label:'United States'}, INTL:{base:38,step:12,label:'International'} };
+  var SHIP_STEP=0.5, PICKUP_OK=true, PICKUP_TEXT='Pick up in Toronto instead \u2014 free, no shipping charge. We\u2019ll message you to arrange it.';
+  function shipCost(zone,kg){ var r=SHIP[zone]; var extra=Math.max(0,Math.ceil((kg-SHIP_STEP)/SHIP_STEP)); return r.base+extra*r.step; }
 
   /* ===================== INVENTORY =====================
      LIVE_ITEMS is a copy of /threeaces/items from the Club Manager's Firebase
@@ -731,19 +734,21 @@
   function buildProducts(items){
     var map={};
     Object.keys(items).forEach(function(key){
-      var it=items[key]; if(!it || it.active===false || it.grp!=='Clothing') return;
+      var it=items[key]; if(!it || it.active===false || it.adhoc || it.web===false || (it.grp&&it.grp!=='Clothing')) return;
       var m=/^(.*?)\s*\((.*?)\)\s*$/.exec(it.name||''), base=(m?m[1]:it.name||'').trim(), colour=m?m[2]:'Black';
       var ALIAS={'Mens T-Shirts':'Mens T-Shirt','Youth T-Shirts':'Youth T-Shirt','Touque\'s':'Touque','Touques':'Touque','Toque':'Touque','Snapback Hat':'Snapback Hats'};
       if(ALIAS[base]) base=ALIAS[base];
       var meta=META[base]||{id:key,name:base,img:'',weight:0.3,desc:''};
       var p=map[meta.id]||(map[meta.id]={id:meta.id,name:meta.name,cat:it.cat,order:it.order||99,img:meta.img,desc:meta.desc,weight:meta.weight,colours:[]});
       p.order=Math.min(p.order,it.order||99);
+      if(it.weight>0) p.weight=+it.weight;
+      if(it.photoId && !p.photoId) p.photoId=it.photoId;
       var sale=it.salePct||0;
       if(/Mulitple|Multiple/.test(colour)){
         // Flex Fit Hat: size keys are "Red S-M" etc. -> split into colours
         Object.keys(it.sizes||{}).forEach(function(k){ var mm=/^(\w+)\s+(.+)$/.exec(k); if(!mm) return; var c=getColour(p,mm[1]); c.sizes[mm[2]]={price:it.sizes[k].price,stock:it.sizes[k].stock||0,sale:sale}; });
       } else {
-        var c=getColour(p,colour==='Champion'?'Champion':colour);
+        var c=getColour(p,colour==='Champion'?'Champion':colour); if(it.photoId) c.photoId=it.photoId;
         Object.keys(it.sizes||{}).forEach(function(k){ c.sizes[normSize(k)]={price:it.sizes[k].price,stock:it.sizes[k].stock||0,sale:sale}; });
       }
     });
@@ -811,7 +816,7 @@
   function cardHTML(p){
     var total=totalStock(p), ss=inStockSizes(p), pr=priceRange(p);
     var rib = total===0 ? '<span class="rib out">Sold out</span>' : (onSale(p) ? '<span class="rib low">On sale</span>' : (total<=4 ? '<span class="rib low">Only '+total+' left</span>' : '<span class="rib">Final sale</span>'));
-    var ph = p.img ? '<div class="ph"><img src="'+p.img+'" alt="'+esc(p.name)+'" loading="lazy"></div>'
+    var ph = (p.img||p.photoId) ? '<div class="ph"><img src="'+(p.img||'')+'"'+(p.photoId?' data-file="'+esc(p.photoId)+'"':'')+' alt="'+esc(p.name)+'" loading="lazy"></div>'
                    : '<div class="ph nophoto"><div class="crest"></div><span class="tag">Photo coming</span></div>';
     var sw = '<div class="sw">'+p.colours.map(function(c){ return '<i style="background:'+c.hex+'" title="'+esc(c.n)+'"></i>'; }).join('')+'</div>';
     var sizeTxt = ss.length ? (ss.length===1 ? ss[0] : ss[0]+' – '+ss[ss.length-1]) : 'Sold out';
@@ -826,6 +831,7 @@
   /* ===================== RENDER: SHOP ===================== */
   var catSel=document.getElementById('catSel');
   (function(){ var opts=['<option value="all">All in stock</option>']; CATS.forEach(function(c){ var n=P.filter(function(p){ return p.cat===c && totalStock(p)>0; }).length; opts.push('<option value="'+esc(c)+'">'+esc(c)+' ('+n+')</option>'); }); opts.push('<option value="soldout">Sold out</option>'); catSel.innerHTML=opts.join(''); })();
+  function fillCats(){ var keep=catSel.value; var opts=['<option value="all">All in stock</option>']; CATS.forEach(function(c){ var n=P.filter(function(p){ return p.cat===c && totalStock(p)>0; }).length; if(n) opts.push('<option value="'+esc(c)+'">'+esc(c)+' ('+n+')</option>'); }); opts.push('<option value="soldout">Sold out</option>'); catSel.innerHTML=opts.join(''); if(keep) catSel.value=keep; }
   catSel.addEventListener('change', renderShop);
   function renderShop(){
     var v=catSel.value, list;
@@ -851,7 +857,8 @@
   function drawProduct(p){
     var root=document.getElementById('prodRoot');
     var total=totalStock(p);
-    var media = p.img ? '<img src="'+p.img+'" alt="'+esc(p.name)+'">' : '<div class="nophoto"><div class="crest"></div></div>';
+    var pid=(p.colours[sel.ci]&&p.colours[sel.ci].photoId)||p.photoId;
+    var media = (p.img||pid) ? '<img src="'+(p.img||'')+'"'+(pid?' data-file="'+esc(pid)+'"':'')+' alt="'+esc(p.name)+'">' : '<div class="nophoto"><div class="crest"></div></div>';
     var sw = p.colours.map(function(c,i){ return '<button class="swatch'+(i===sel.ci?' active':'')+'" data-ci="'+i+'" title="'+esc(c.n)+'"><i style="background:'+c.hex+'"></i></button>'; }).join('');
     var sizes = sizesOf(p).map(function(s){ var st=stockOf(p,sel.ci,s); var cls='size'+(s===sel.size?' active':'')+(st===0?' out':''); return '<button class="'+cls+'" data-size="'+s+'"'+(st===0?' disabled':'')+'>'+s+(st>0&&st<=2?'<span class="low">'+st+' left</span>':'')+'</button>'; }).join('');
     var price = sel.size ? priceOf(p,sel.ci,sel.size) : priceRange(p)[0];
@@ -870,7 +877,7 @@
         '<div class="addrow"><div class="qty"><button id="qm">−</button><span id="qv">'+sel.qty+'</span><button id="qp">+</button></div><button class="btn btn-gold" id="addBtn"'+(st===0?' disabled':'')+'>'+(total===0?'Sold out':'Add to cart')+'</button></div>'+
         '<div class="fs-box"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span><b>Final sale.</b> No returns or exchanges on club merchandise. Check the size chart and the stock line above before you add it.</span></div>'+
         '<div class="details">'+chart+
-          '<details><summary>Shipping &amp; pickup</summary><div class="body">Ships from Toronto, ON. Rates are by destination and total weight (this item is about '+p.weight+' kg). Up to 0.5 kg: Canada $'+SHIP.CA.base+', United States $'+SHIP.US.base+', international $'+SHIP.INTL.base+'; each extra 0.5 kg adds $'+SHIP.CA.step+' / $'+SHIP.US.step+' / $'+SHIP.INTL.step+'. Free local pickup in Toronto — choose it at checkout.</div></details>'+
+          '<details><summary>Shipping &amp; pickup</summary><div class="body">Ships from Toronto, ON. Rates are by destination and total weight (this item is about '+p.weight+' kg). Up to '+SHIP_STEP+' kg: Canada $'+SHIP.CA.base+', United States $'+SHIP.US.base+', international $'+SHIP.INTL.base+'; each extra '+SHIP_STEP+' kg adds $'+SHIP.CA.step+' / $'+SHIP.US.step+' / $'+SHIP.INTL.step+'. Free local pickup in Toronto — choose it at checkout.</div></details>'+
           '<details><summary>Where the money goes</summary><div class="body">Every dollar of profit from this item goes to the Three Aces club fund — the Annual Picnic and the Christmas Food Drive. Nobody takes a cut.</div></details>'+
         '</div>'+
       '</div>';
@@ -899,7 +906,7 @@
     var sub=0, w=0;
     var lines=cart.map(function(l,i){
       var p=byId(l.pid), c=p.colours[l.ci], unit=priceOf(p,l.ci,l.size), amt=unit*l.qty; sub+=amt; w+=p.weight*l.qty;
-      var th = p.img ? '<div class="th"><img src="'+p.img+'" alt=""></div>' : '<div class="th nophoto"><i></i></div>';
+      var th = (p.img||p.photoId) ? '<div class="th"><img src="'+(p.img||'')+'"'+(p.photoId?' data-file="'+esc(p.photoId)+'"':'')+' alt=""></div>' : '<div class="th nophoto"><i></i></div>';
       return '<div class="line">'+th+'<div><div class="nm">'+esc(p.name).toUpperCase()+'</div><div class="sub">'+esc(c.n)+' · Size '+esc(l.size)+' · '+money(unit)+' each</div><div class="fs">Final sale</div><button class="rm" data-rm="'+i+'">Remove</button></div>'+
              '<div class="qty"><button data-dq="'+i+'">−</button><span>'+l.qty+'</span><button data-iq="'+i+'">+</button></div><div class="amt">'+money(amt)+'</div></div>';
     }).join('');
@@ -907,9 +914,9 @@
     var zoneName = pickup ? 'Pickup in Toronto' : ({CA:'Canada',US:'United States',INTL:'International'})[zone];
     root.innerHTML =
       '<div><div class="lines">'+lines+'</div>'+
-        '<div class="shipbox"><b>Where are we shipping?</b><div class="muted" style="font-size:13px;margin-top:4px">Order weight about '+w.toFixed(2)+' kg. The first 0.5 kg is the base rate; each extra 0.5 kg adds a step.</div>'+
+        '<div class="shipbox"><b>Where are we shipping?</b><div class="muted" style="font-size:13px;margin-top:4px">Order weight about '+w.toFixed(2)+' kg. The first '+SHIP_STEP+' kg is the base rate; each extra '+SHIP_STEP+' kg adds a step.</div>'+
           '<div class="zones"><button class="zone'+(zone==='CA'&&!pickup?' active':'')+'" data-zone="CA">Canada — $'+shipCost('CA',w)+'</button><button class="zone'+(zone==='US'&&!pickup?' active':'')+'" data-zone="US">United States — $'+shipCost('US',w)+'</button><button class="zone'+(zone==='INTL'&&!pickup?' active':'')+'" data-zone="INTL">International — $'+shipCost('INTL',w)+'</button></div>'+
-          '<label class="chk"><input type="checkbox" id="pickupChk"'+(pickup?' checked':'')+'><span>Pick up in Toronto instead — free, no shipping charge. We’ll message you to arrange it.</span></label>'+
+          (PICKUP_OK?'<label class="chk"><input type="checkbox" id="pickupChk"'+(pickup?' checked':'')+'><span>'+esc(PICKUP_TEXT)+'</span></label>':'')+
         '</div></div>'+
       '<div class="summary"><h3 class="display">ORDER SUMMARY</h3>'+
         '<div class="srow"><span class="muted">Subtotal</span><span>'+money(sub)+'</span></div>'+
@@ -924,7 +931,7 @@
     root.querySelectorAll('[data-dq]').forEach(function(b){ b.addEventListener('click', function(){ var l=cart[+b.dataset.dq]; l.qty--; if(l.qty<=0) cart.splice(+b.dataset.dq,1); saveCart(); updateCount(); renderCart(); }); });
     root.querySelectorAll('[data-iq]').forEach(function(b){ b.addEventListener('click', function(){ var l=cart[+b.dataset.iq], p=byId(l.pid), max=stockOf(p,l.ci,l.size); if(l.qty<max){ l.qty++; } else { toast('Only '+max+' in stock in that size.'); } saveCart(); updateCount(); renderCart(); }); });
     root.querySelectorAll('[data-zone]').forEach(function(b){ b.addEventListener('click', function(){ zone=b.dataset.zone; pickup=false; renderCart(); }); });
-    document.getElementById('pickupChk').addEventListener('change', function(e){ pickup=e.target.checked; renderCart(); });
+    var pc=document.getElementById('pickupChk'); if(pc) pc.addEventListener('change', function(e){ pickup=e.target.checked; renderCart(); });
     root.querySelectorAll('[data-pay]').forEach(function(b){ b.addEventListener('click', function(){ pay=b.dataset.pay; renderCart(); }); });
     var fs=document.getElementById('fsChk'), pb=document.getElementById('placeBtn');
     fs.addEventListener('change', function(){ pb.disabled=!fs.checked; });
@@ -1006,6 +1013,65 @@
   });
 
   renderFeatured(); updateCount();
+
+  /* ===================== LIVE DATA FROM THE CLUB MANAGER =====================
+     Same Firebase project the phones use. The site signs in anonymously and only
+     ever reads: /threeaces/items and /threeaces/site, plus photos from the file
+     store. If anything fails, the copy baked into this file above is what shows. */
+  var FB = { key:'AIzaSyCLlwbfE4ZilKtY5AakOUOl_h7_0uP-VQw', db:'https://three-aces-default-rtdb.firebaseio.com' };
+  var fbTok=null, fileCache={};
+  function fbAuth(){
+    if(fbTok) return Promise.resolve(fbTok);
+    var saved=null; try{ saved=JSON.parse(localStorage.getItem('ta_site_auth')||'null'); }catch(e){}
+    var p = saved&&saved.r
+      ? fetch('https://securetoken.googleapis.com/v1/token?key='+FB.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grant_type:'refresh_token',refresh_token:saved.r})}).then(function(r){ return r.json(); }).then(function(j){ if(!j.id_token) throw 0; try{ localStorage.setItem('ta_site_auth',JSON.stringify({r:j.refresh_token||saved.r})); }catch(e){} return j.id_token; })
+      : Promise.reject();
+    return p.catch(function(){ return fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+FB.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({returnSecureToken:true})}).then(function(r){ return r.json(); }).then(function(j){ if(!j.idToken) throw new Error('auth'); try{ localStorage.setItem('ta_site_auth',JSON.stringify({r:j.refreshToken})); }catch(e){} return j.idToken; }); })
+      .then(function(t){ fbTok=t; return t; });
+  }
+  function fbGet(path){ return fbAuth().then(function(t){ return fetch(FB.db+'/'+path+'.json?auth='+encodeURIComponent(t),{cache:'no-store'}); }).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }); }
+  function loadFile(id){ if(fileCache[id]) return fileCache[id]; fileCache[id]=fbGet('threeacesFiles/'+encodeURIComponent(id)).then(function(f){ return (f&&f.data)||''; }).catch(function(){ return ''; }); return fileCache[id]; }
+  function hydrateImages(){ document.querySelectorAll('img[data-file]').forEach(function(im){ if(im.dataset.done) return; im.dataset.done='1'; loadFile(im.dataset.file).then(function(d){ if(d) im.src=d; }); }); }
+  function ord(n){ n=+n||0; var s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+  function applySite(c){
+    if(!c) return;
+    var pic=c.picnic||{}, fd=c.foodDrive||{}, ct=c.contact||{}, sh=c.shipping||{};
+    function setHTML(sel,h){ document.querySelectorAll(sel).forEach(function(e){ e.innerHTML=h; }); }
+    if(pic.annual){ setHTML('.hero .badge','<b>'+pic.annual+'</b><span>'+ord(pic.annual).replace(/^\d+/,'')+' Annual<br>Picnic '+(pic.year||'')+'</span>'); setHTML('#view-picnic .sec-head h2','THE '+ord(pic.annual).toUpperCase()+' ANNUAL<br>THREE ACES PICNIC'); document.querySelectorAll('.fact b').forEach(function(b){ if(/ANNUAL PICNIC/.test(b.textContent)) b.nextElementSibling.textContent='The '+ord(pic.annual)+' Annual Picnic is '+(pic.dateText||'coming')+' at '+((pic.location||'Heart Lake').split(',')[0])+'.'; }); }
+    if(pic.year||pic.dateText||pic.location){ var db=document.querySelector('#view-picnic .datebox'); if(db) db.innerHTML='<b>'+esc(pic.year||'')+'</b><span>'+esc((pic.location||'').split(',')[0])+'<br>'+esc(pic.dateText||'')+'</span>'; }
+    if(pic.photos&&pic.photos.length){ var mo=document.querySelector('#view-picnic .mosaic'); if(mo) mo.innerHTML=pic.photos.slice(0,8).map(function(id){ return '<div><img data-file="'+esc(id)+'" alt=""></div>'; }).join(''); }
+    if(fd.annual){ setHTML('#view-fooddrive h2.display',ord(fd.annual).toUpperCase()+' ANNUAL<br>CHRISTMAS FOOD DRIVE'); }
+    if(fd.lastYearTotal){ var m='$'+(+fd.lastYearTotal).toLocaleString(); document.querySelectorAll('#view-fooddrive .bignum b, #view-story .stat b').forEach(function(b){ if(/^\$[\d,]+$/.test(b.textContent)) b.textContent=m; }); document.querySelectorAll('.fact span').forEach(function(sp){ sp.textContent=sp.textContent.replace(/\$[\d,]+ raised/,m+' raised'); }); }
+    if(fd.blurb){ var bp=document.querySelector('#view-fooddrive .inner > div > p'); if(bp) bp.textContent=fd.blurb; }
+    if(fd.gofundme){ var b=document.getElementById('donateBtn'), n=document.getElementById('donateNote'); b.href=fd.gofundme; b.target='_blank'; b.rel='noopener'; b.removeAttribute('data-view'); b.textContent='Donate on GoFundMe'; b.className='btn btn-gold'; b.removeAttribute('aria-disabled'); b.style.opacity=''; b.style.pointerEvents=''; if(n) n.textContent='Opens GoFundMe in a new tab'; }
+    if(c.ticker&&c.ticker.length){ var tt=document.getElementById('tickerTrack'); var one=c.ticker.map(function(t){ return '<span><i></i>'+esc(t)+'</span>'; }).join(''); tt.innerHTML=one+one; }
+    if(ct.email){ document.querySelectorAll('.ft-col span, .contact-list span').forEach(function(e){ if(/@threeaces\.ca$/.test(e.textContent.trim())) e.textContent=ct.email; }); }
+    if(ct.instagram){ document.querySelectorAll('a[href*="instagram.com"]').forEach(function(a){ a.href='https://www.instagram.com/'+ct.instagram+'/'; if(/^@/.test(a.textContent.trim())) a.textContent='@'+ct.instagram; }); }
+    if(sh.zones){ Object.keys(sh.zones).forEach(function(k){ if(SHIP[k]){ SHIP[k].base=+sh.zones[k].base||SHIP[k].base; SHIP[k].step=+sh.zones[k].step||SHIP[k].step; if(sh.zones[k].label) SHIP[k].label=sh.zones[k].label; } }); }
+    if(sh.stepKg) SHIP_STEP=+sh.stepKg||0.5;
+    if(typeof sh.pickup==='boolean') PICKUP_OK=sh.pickup;
+    if(sh.pickupText) PICKUP_TEXT=sh.pickupText;
+    if(c.sponsors){ var list=Object.keys(c.sponsors).map(function(k){ return c.sponsors[k]; }).filter(function(x){ return x&&x.show!==false; }).sort(function(a,b){ return (a.order||0)-(b.order||0); });
+      if(list.length){ document.getElementById('logoGrid').innerHTML=list.map(function(x){ var href=x.url||(x.instagram?'https://www.instagram.com/'+x.instagram+'/':'#'); return '<a class="logo" href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(x.name)+'">'+(x.logoId?'<img data-file="'+esc(x.logoId)+'" alt="'+esc(x.name)+'">':'<b style="color:#141414;font-family:var(--display);font-size:20px">'+esc(x.name)+'</b>')+'<span>'+esc(x.name)+'</span></a>'; }).join(''); } }
+    hydrateImages();
+  }
+  function goLive(){
+    Promise.all([fbGet('threeaces/items'), fbGet('threeaces/site').catch(function(){ return null; })]).then(function(res){
+      var items=res[0], site=res[1];
+      if(items && Object.keys(items).length){
+        P=buildProducts(items);
+        cart=cart.filter(function(l){ var p=byId(l.pid); return p && p.colours[l.ci] && p.colours[l.ci].sizes[l.size]; }); saveCart(); updateCount();
+        renderFeatured(); fillCats();
+        var v=(location.hash||'#home').slice(1);
+        if(v==='shop') renderShop(); if(v==='product') renderProduct(); if(v==='cart') renderCart();
+      }
+      applySite(site);
+      document.documentElement.setAttribute('data-live','1');
+    }).catch(function(e){ /* offline, blocked, or rules changed: the baked copy stays */ });
+  }
+  try{ goLive(); }catch(e){}
+  new MutationObserver(function(){ hydrateImages(); }).observe(document.body,{childList:true,subtree:true});
+
   try{ syncFromHash(); }catch(e){ showView('home'); }
 })();
 </script>
