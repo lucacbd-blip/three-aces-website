@@ -106,7 +106,8 @@
   .hero .ctas{ display:flex; flex-wrap:wrap; gap:14px; }
   .hero .badge{ position:absolute; right:24px; top:110px; width:118px; height:118px; border:1px solid rgba(214,178,94,.55); border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:rgba(7,7,7,.5); backdrop-filter:blur(6px); animation:spinIn 1.2s .3s ease both; }
   .hero .badge b{ font-family:var(--display); font-size:44px; color:var(--gold); line-height:1; }
-  .hero .badge span{ font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); line-height:1.3; }
+  .hero .badge b sup{ font-size:16px; vertical-align:top; position:relative; top:4px; margin-left:1px; letter-spacing:.02em; }
+  .hero .badge span{ margin-top:4px;  font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); line-height:1.3; }
   @keyframes spinIn{ from{ opacity:0; transform:rotate(-30deg) scale(.7);} to{ opacity:1; transform:none;} }
   @media (max-width:700px){ .hero .badge{ display:none; } .hero .content{ padding-block:110px 60px; } .hero h1{ font-size:clamp(58px,18vw,90px); } }
 
@@ -303,7 +304,7 @@
   .details details{ border-bottom:1px solid var(--line); }
   .details summary{ cursor:pointer; padding:16px 0; font-size:12px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; list-style:none; display:flex; justify-content:space-between; }
   .details summary::after{ content:"+"; color:var(--gold); font-size:18px; line-height:1; }
-  .details details[open] summary::after{ content:"–"; }
+  .details details[open] summary::after{ content:"\2212"; }
   .details .body{ padding:0 0 18px; font-size:14px; color:var(--muted); line-height:1.65; }
   .details table{ width:100%; border-collapse:collapse; font-size:13px; color:var(--text); }
   .details td{ padding:7px 0; border-bottom:1px solid var(--line); }
@@ -398,11 +399,11 @@
 <section id="view-home" class="view">
   <div class="hero">
     <div class="bg"></div><div class="shade"></div><div class="shade2"></div>
-    <div class="badge"><b>10</b><span>th Annual<br>Picnic 2027</span></div>
+    <div class="badge"><b>10<sup>th</sup></b><span>Annual<br>Picnic 2027</span></div>
     <div class="wrap content">
       <span class="eyebrow">Toronto &middot; Est. 2013</span>
       <h1 class="display"><span class="l">FAITH.</span><span class="l">LOYALTY.</span><span class="l hon">HONOR.</span></h1>
-      <p>An Italian Canadian cultural club founded in 2013 to keep the traditions alive and keep families together. Everyone is welcome. Every dollar from the gear we sell goes back into the club and the community &mdash; the Annual Picnic, the Christmas Food Drive, and the people who need a hand.</p>
+      <p>An Italian Canadian cultural club founded in 2013 to keep the traditions alive and keep families together. Everyone is welcome. Every dollar from the gear we sell goes back into the club and the community: the Annual Picnic, the Christmas Food Drive, and people who need a hand.</p>
       <div class="ctas">
         <a class="btn btn-fill" href="#shop" data-view="shop">Shop the Gear</a>
         <a class="btn" href="#story" data-view="story">Our Story</a>
@@ -419,7 +420,7 @@
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <div><span class="eyebrow">The Gear</span><h2 class="display">WEAR THE CREST</h2></div>
-        <p>Club apparel straight from our own stock &mdash; tees, long sleeves, hoodies, hats. Limited sizes. When a size sells out, it&rsquo;s gone until the next run.</p>
+        <p>Tees, long sleeves, hoodies and hats, straight from our own stock. Limited sizes. When a size sells out, it&rsquo;s gone until the next run.</p>
       </div>
       <div class="pgrid" id="featuredGrid" data-reveal></div>
       <div style="margin-top:34px;display:flex;justify-content:center;" data-reveal><a class="btn" href="#shop" data-view="shop">See everything in stock</a></div>
@@ -433,13 +434,13 @@
         <a class="fact" href="#story" data-view="story"><b>WHO WE ARE</b><span>Founded in Toronto in 2013 to keep the Italian traditions alive and families together. Everybody is welcome.</span><span style="color:var(--gold);margin-top:6px;">Read our story &rarr;</span></a>
         <a class="fact" href="#picnic" data-view="picnic"><b>THE ANNUAL PICNIC</b><span>Nine down. The 10th Annual Picnic is summer 2027 at Heart Lake.</span><span style="color:var(--gold);margin-top:6px;">See the picnic &rarr;</span></a>
         <a class="fact" href="#fooddrive" data-view="fooddrive"><b>CHRISTMAS FOOD DRIVE</b><span>$4,517 raised last year, 100% turned into grocery gift cards at St. Philip Neri.</span><span style="color:var(--gold);margin-top:6px;">The food drive &rarr;</span></a>
-        <a class="fact" href="#sponsors" data-view="sponsors"><b>OUR SPONSORS</b><span>The businesses that make the picnic possible &mdash; and how to become one.</span><span style="color:var(--gold);margin-top:6px;">Meet the sponsors &rarr;</span></a>
+        <a class="fact" href="#sponsors" data-view="sponsors"><b>OUR SPONSORS</b><span>The businesses that make the picnic possible, and how you can become one.</span><span style="color:var(--gold);margin-top:6px;">Meet the sponsors &rarr;</span></a>
       </div>
     </div>
   </section>
   <div class="insta">
     <div class="wrap row">
-      <div><h3 class="display">FOLLOW THE CLUB</h3><p>Picnic footage, food drive updates and new drops &mdash; tag <b style="color:var(--text)">@three_aces_italian</b>.</p></div>
+      <div><h3 class="display">FOLLOW THE CLUB</h3><p>Picnic videos, food drive updates and new gear. Tag us at <b style="color:var(--text)">@three_aces_italian</b>.</p></div>
       <a class="btn" href="https://www.instagram.com/three_aces_italian/" target="_blank" rel="noopener">@three_aces_italian</a>
     </div>
   </div>
@@ -451,8 +452,8 @@
       <div data-reveal>
         <span class="eyebrow">Who We Are</span>
         <h2 class="display">KEEPING THE<br>TRADITIONS ALIVE</h2>
-        <p>Three Aces Italian Canadian Cultural Club was founded in Toronto in 2013 by a group of friends who saw the traditions they grew up with starting to slip away &mdash; the Sunday lunches, the picnics, the whole family in one place. We started the club to keep them alive, and to keep families and their children together the way our parents and grandparents kept us together.</p>
-        <p>You don&rsquo;t have to be Italian. Everybody is welcome at our table. We are volunteer-run &mdash; nobody draws a salary, and every dollar from the gear you buy here goes back into the picnic, the food drive and the community.</p>
+        <p>Three Aces Italian Canadian Cultural Club was founded in Toronto in 2013 by a group of friends who saw the traditions they grew up with starting to slip away. The Sunday lunches, the picnics, the whole family in one place. We started the club to keep the traditions alive, and to keep families and their children together the way our parents and grandparents kept us together.</p>
+        <p>You don&rsquo;t have to be Italian. Everybody is welcome at our table. We're run by volunteers. Nobody draws a salary, and every dollar from the gear you buy here goes back into the picnic, the food drive and the community.</p>
         <div class="stats">
           <div class="stat"><b>2013</b><span>Founded in Toronto</span></div>
           <div class="stat"><b>$4,517</b><span>Raised last Christmas</span></div>
@@ -472,7 +473,7 @@
       <div class="sec-head" data-reveal>
         <div><span class="eyebrow">Annual Picnic</span><h2 class="display">THE 10TH ANNUAL<br>THREE ACES PICNIC</h2></div>
         <div>
-          <p>One Sunday every summer at Heart Lake Conservation Area in Brampton. Pasta, pizza, bocce, a raffle, a live performer, and the pool and splash pad for the kids. Everything raised through clothing and the raffle goes straight back into the picnic and the food drive &mdash; 100%. Nine down; the tenth is going to be the big one.</p>
+          <p>One Sunday every summer at Heart Lake Conservation Area in Brampton. Pasta, pizza, bocce, a raffle, a live performer, and the pool and splash pad for the kids. Everything raised through clothing and the raffle goes straight back into the picnic and the food drive. All of it. Nine down, and the tenth is going to be a big one.</p>
           <div class="datebox"><b>2027</b><span>Summer 2027 &middot; Heart Lake, Birchview #1<br>Date to be announced</span></div>
           <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;"><a class="btn btn-gold btn-sm" href="#sponsor">Become a Sponsor</a><a class="btn btn-sm" href="#sponsors" data-view="sponsors">Our Sponsors</a></div>
         </div>
@@ -503,7 +504,7 @@
       <div data-reveal>
         <span class="eyebrow">Christmas Food Drive</span>
         <h2 class="display">6TH ANNUAL<br>CHRISTMAS FOOD DRIVE</h2>
-        <p>Every December, Three Aces goes to the St. Philip Neri food bank in Toronto and hands out grocery gift cards to families who need them. 100% of what comes in goes back into the community &mdash; the gift cards and the cost of the day itself. Nobody at Three Aces takes a dollar.</p>
+        <p>Every December, Three Aces goes to the St. Philip Neri food bank in Toronto and hands out grocery gift cards to families who need them. 100% of what comes in goes back into the community, into the gift cards and the cost of the day itself. Nobody at Three Aces takes a dollar.</p>
         <div class="bignum">
           <div><b>$4,517</b><span>Raised in 2025</span></div>
           <div><b>100%</b><span>Goes back to the community</span></div>
@@ -536,7 +537,7 @@
       <div class="sponsors" data-reveal id="sponsors" style="margin-top:20px;padding-top:0;border-top:none;">
         <div class="sec-head" style="margin-bottom:26px;align-items:flex-end;">
           <div><span class="eyebrow">Our Sponsors</span><h1 class="display" style="font-size:clamp(40px,6vw,74px);margin:12px 0 0;">THANK YOU TO OUR<br>2026 PICNIC SPONSORS</h1></div>
-          <p style="max-width:460px;">Every sponsor gets an honourable mention at the picnic, their logo on the invitation, a custom plaque, and a spot on the sponsor roll all day long. Tap a logo to visit them &mdash; and please leave them a 5-star Google review.</p>
+          <p style="max-width:460px;">Every sponsor gets an honourable mention at the picnic, their logo on the invitation, a custom plaque, and a spot on the sponsor roll all day long. Tap a logo to visit them, and please leave them a 5-star Google review.</p>
         </div>
         <div class="logos" id="logoGrid"></div>
         <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;"><a class="btn btn-gold" href="#sponsor">Become a Sponsor</a></div>
@@ -548,7 +549,7 @@
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <div><span class="eyebrow">Sponsorship</span><h2 class="display">BECOME A<br>PICNIC SPONSOR</h2></div>
-        <p>With your support, every dollar raised goes towards the event to keep the Italian culture strong in the community and with our youth. $500 is the minimum to be a sponsor &mdash; cash, food and entertainment, or raffle prizes &mdash; and if you want to give more, we won&rsquo;t hold you back.</p>
+        <p>With your support, every dollar raised goes towards the event to keep the Italian culture strong in the community and with our youth. The minimum to be a sponsor is $500 in cash, food and entertainment, or raffle prizes. If you want to give more, we won&rsquo;t stop you.</p>
       </div>
       <div class="contact-grid" data-reveal>
         <div>
@@ -562,12 +563,12 @@
         <form class="formblk" id="sponsorForm" novalidate>
           <div class="field"><label>How would you like to sponsor? Pick one or more</label></div>
           <div class="tiers" id="tiers">
-            <div class="tier active" data-tier="Cash / Gift Cards"><b>&#10003;</b><strong>Cash / Gift Cards</strong><span>Goes towards event expenses &mdash; venue, tent, and so on.</span></div>
-            <div class="tier" data-tier="Food / Entertainment"><b>&nbsp;</b><strong>Food / Entertainment</strong><span>Your own services or products &mdash; food, snacks, entertainment.</span></div>
-            <div class="tier" data-tier="Raffle Prizes"><b>&nbsp;</b><strong>Raffle Prizes</strong><span>Prizes for the raffle, or one big prize &mdash; a TV, a tent.</span></div>
+            <div class="tier active" data-tier="Cash / Gift Cards"><b>&#10003;</b><strong>Cash / Gift Cards</strong><span>Goes towards event costs like the venue and the tent.</span></div>
+            <div class="tier" data-tier="Food / Entertainment"><b>&nbsp;</b><strong>Food / Entertainment</strong><span>Your own products or services, like food, snacks or entertainment.</span></div>
+            <div class="tier" data-tier="Raffle Prizes"><b>&nbsp;</b><strong>Raffle Prizes</strong><span>Prizes for the raffle, or one big prize like a TV.</span></div>
           </div>
           <div class="field">
-            <label>Sponsorship amount or value &mdash; $500 minimum, no maximum</label>
+            <label>Sponsorship amount or value ($500 minimum)</label>
             <div class="amounts" id="amounts"><button type="button" class="zone active" data-amt="500">$500</button><button type="button" class="zone" data-amt="750">$750</button><button type="button" class="zone" data-amt="1000">$1,000</button><button type="button" class="zone" data-amt="2500">$2,500</button><button type="button" class="zone" data-amt="other">Other</button></div>
             <input name="amount" id="amountInput" type="number" min="500" step="50" value="500" style="max-width:220px;margin-top:8px" hidden>
           </div>
@@ -602,7 +603,7 @@
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <div><span class="eyebrow">Contact Us</span><h2 class="display">GET IN TOUCH</h2></div>
-        <p>Questions about the club, an order, the picnic or the food drive &mdash; send us a note. Everybody is welcome.</p>
+        <p>Got a question about the club, an order, the picnic or the food drive? Send us a note. Everybody is welcome.</p>
       </div>
       <div class="contact-grid" data-reveal>
         <div class="contact-list">
@@ -632,7 +633,7 @@
   <div class="shop-head"><div class="wrap">
     <span class="eyebrow">The Store</span>
     <h1 class="display">EVERYTHING IN STOCK</h1>
-    <p>Real-time counts from the club&rsquo;s own inventory. Prices go up one tier at 2XL and again at 4XL. <b style="color:var(--text)">All sales are final</b> &mdash; check the size chart before you order.</p>
+    <p>Real-time counts from the club&rsquo;s own inventory. Prices go up one tier at 2XL and again at 4XL. <b style="color:var(--text)">All sales are final</b>, so check the size chart before you order.</p>
   </div></div>
   <div class="wrap filterbar">
     <div class="selwrap"><label for="catSel">Show</label><div class="sel"><select id="catSel"></select></div></div>
@@ -642,7 +643,7 @@
   <div class="trust">
     <div><svg viewBox="0 0 24 24"><rect x="1" y="6" width="16" height="12" rx="1"/><path d="M17 10h3l3 3v5h-6z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg><div><b>Ships from Toronto</b><span>Canada, US and international. Rate by destination &amp; weight at checkout.</span></div></div>
     <div><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9H3z"/><path d="M10 20v-6h4v6"/></svg><div><b>Free pickup in Toronto</b><span>Choose pickup at checkout and pay no shipping.</span></div></div>
-    <div><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><div><b>All sales final</b><span>No returns or exchanges. Every size is listed &mdash; pick carefully.</span></div></div>
+    <div><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><div><b>All sales final</b><span>No returns or exchanges. Every size is listed, so pick carefully.</span></div></div>
   </div>
 </section>
 
@@ -665,7 +666,7 @@
     <form class="formblk" id="checkoutForm" novalidate>
       <div class="fgrid">
         <div class="field"><label>Full name</label><input name="name" required autocomplete="name"></div>
-        <div class="field"><label>Email &mdash; your order confirmation goes here</label><input name="email" type="email" required autocomplete="email"></div>
+        <div class="field"><label>Email (we send your order confirmation here)</label><input name="email" type="email" required autocomplete="email"></div>
         <div class="field"><label>Phone</label><input name="phone" type="tel" autocomplete="tel" placeholder="(000) 000-0000"></div>
         <div class="field" id="coAddrWrap"><label>Street address</label><input name="address" autocomplete="street-address"></div>
         <div class="field coship"><label>City</label><input name="city" autocomplete="address-level2"></div>
@@ -675,7 +676,7 @@
         <div class="field full"><label>Note for the club (optional)</label><textarea name="note" rows="2"></textarea></div>
       </div>
       <div class="fs-box"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span id="coPayNote"></span></div>
-      <label class="chk"><input type="checkbox" id="coFs"><span>I understand every item in this order is <b>final sale</b> &mdash; no returns or exchanges.</span></label>
+      <label class="chk"><input type="checkbox" id="coFs"><span>I understand every item in this order is <b>final sale</b>, with no returns or exchanges.</span></label>
       <button class="btn btn-gold" type="submit" id="coSubmit" disabled>Place order</button>
       <a class="btn" href="#cart" data-view="cart">Back to cart</a>
     </form>
@@ -717,7 +718,7 @@
   /* Shipping by weight. Base covers the first 0.5 kg; each extra 0.5 kg adds the step.
      Roughly Canada Post from Toronto. One tee ~0.25 kg, a hoodie ~0.7 kg. */
   var SHIP = { CA:{base:12,step:4,label:'Canada'}, US:{base:22,step:7,label:'United States'}, INTL:{base:38,step:12,label:'International'} };
-  var SHIP_STEP=0.5, PICKUP_OK=true, PICKUP_TEXT='Pick up in Toronto instead \u2014 free, no shipping charge. We\u2019ll message you to arrange it.';
+  var SHIP_STEP=0.5, PICKUP_OK=true, PICKUP_TEXT='Pick up in Toronto instead. It\u2019s free and we\u2019ll message you to set up a time.';
   function shipCost(zone,kg){ var r=SHIP[zone]; var extra=Math.max(0,Math.ceil((kg-SHIP_STEP)/SHIP_STEP)); return r.base+extra*r.step; }
 
   /* ===================== INVENTORY =====================
@@ -734,12 +735,12 @@
   var META = {
     'Mens T-Shirt':        {id:'tee',     name:'Crest Tee',           img:'p_tee.jpg',        weight:0.25, desc:'Heavyweight cotton tee. Crest on the chest, Faith · Loyalty · Honor across the back. The shirt you see on half the club at the picnic.'},
     'Long Sleeve T':       {id:'ls',      name:'Long Sleeve Tee',     img:'p_longsleeve.jpg', weight:0.3,  desc:'Long sleeve cotton tee with THREE ACES down the sleeve and the crest on the chest.'},
-    'Zip-Up Hoodie':       {id:'ziph',    name:'Zip-Up Hoodie',       img:'p_hoodie.jpg',     weight:0.7,  desc:'Full-zip fleece hoodie with the crest on the chest. Heavyweight — built for October picnics and December food drives.'},
+    'Zip-Up Hoodie':       {id:'ziph',    name:'Zip-Up Hoodie',       img:'p_hoodie.jpg',     weight:0.7,  desc:'Full-zip fleece hoodie with the crest on the chest. Heavyweight, made for October picnics and December food drives.'},
     'Pullover Hoodie':     {id:'pullh',   name:'Pullover Hoodie',     img:'',                     weight:0.7,  desc:'Classic pullover fleece hoodie, kangaroo pocket, crest on the chest.'},
     'Sleeveless T':        {id:'sleeveless', name:'Sleeveless Tee',   img:'',                     weight:0.2,  desc:'Cut-off style sleeveless tee for the summer. Crest on the chest.'},
     'Ladies T':            {id:'ladiest', name:'Ladies Tee',          img:'p_ladies.jpg',     weight:0.2,  desc:'Ladies-fit tee with the crest on the front and the full back print.'},
     'Ladies Leggings':     {id:'leggings',name:'Ladies Leggings',     img:'',                     weight:0.3,  desc:'Full-length leggings with the Three Aces logo. Stretch fit.'},
-    'Shorts':              {id:'shorts',  name:'Shorts',              img:'p_shorts.jpg',     weight:0.3,  desc:'Athletic shorts with the crest on the leg. Black Gildan or Champion cut — pick your style.'},
+    'Shorts':              {id:'shorts',  name:'Shorts',              img:'p_shorts.jpg',     weight:0.3,  desc:'Athletic shorts with the crest on the leg. Pick the black Gildan or the Champion cut.'},
     'Track Pants':         {id:'track',   name:'Track Pants',         img:'',                     weight:0.5,  desc:'Fleece track pants with the crest on the hip.'},
     'Youth T-Shirt':       {id:'youtht',  name:'Youth Tee',           img:'',                     weight:0.15, desc:'Kids’ crest tee. Same print, smaller sizes.'},
     'Youth Zip-Up Hoodie': {id:'youthh',  name:'Youth Zip-Up Hoodie', img:'',                     weight:0.45, desc:'Kids’ full-zip hoodie with the crest on the chest.'},
@@ -841,7 +842,7 @@
     var ph = (p.img||p.photoId) ? '<div class="ph"><img src="'+(p.img||'')+'"'+(p.photoId?' data-file="'+esc(p.photoId)+'"':'')+' alt="'+esc(p.name)+'" loading="lazy"></div>'
                    : '<div class="ph nophoto"><div class="crest"></div><span class="tag">Photo coming</span></div>';
     var sw = '<div class="sw">'+p.colours.map(function(c){ return '<i style="background:'+c.hex+'" title="'+esc(c.n)+'"></i>'; }).join('')+'</div>';
-    var sizeTxt = ss.length ? (ss.length===1 ? ss[0] : ss[0]+' – '+ss[ss.length-1]) : 'Sold out';
+    var sizeTxt = ss.length ? (ss.length===1 ? ss[0] : ss[0]+' to '+ss[ss.length-1]) : 'Sold out';
     var priceTxt = pr[0]===pr[1] ? '$'+pr[0] : 'From $'+pr[0];
     return '<a class="pcard" href="#product" data-pid="'+p.id+'">'+rib+ph+'<div class="meta"><span class="cat">'+esc(p.cat)+'</span><span class="nm">'+esc(p.name).toUpperCase()+'</span><div class="row"><span class="pr">'+priceTxt+'</span>'+sw+'</div><div class="row"><span class="muted" style="font-size:12px">'+sizeTxt+'</span><span class="muted" style="font-size:12px">'+total+' in stock</span></div></div></a>';
   }
@@ -887,7 +888,7 @@
     var list = sel.size ? listPriceOf(p,sel.ci,sel.size) : price;
     var st = sel.size ? stockOf(p,sel.ci,sel.size) : 0;
     var chart = p.cat==='Hats & More' ? '' :
-      '<details><summary>Size chart</summary><div class="body"><table><tr><td class="muted">Size</td><td class="muted">Chest</td></tr><tr><td>S</td><td>34–36"</td></tr><tr><td>M</td><td>38–40"</td></tr><tr><td>L</td><td>42–44"</td></tr><tr><td>XL</td><td>46–48"</td></tr><tr><td>2XL</td><td>50–52"</td></tr><tr><td>3XL</td><td>54–56"</td></tr><tr><td>4XL</td><td>58–60"</td></tr><tr><td>5XL</td><td>62–64"</td></tr></table><p style="margin:10px 0 0;font-size:12px;color:var(--gold)">Confirm against the supplier spec sheet before going live.</p></div></details>';
+      '<details><summary>Size chart</summary><div class="body"><table><tr><td class="muted">Size</td><td class="muted">Chest</td></tr><tr><td>S</td><td>34-36"</td></tr><tr><td>M</td><td>38-40"</td></tr><tr><td>L</td><td>42-44"</td></tr><tr><td>XL</td><td>46-48"</td></tr><tr><td>2XL</td><td>50-52"</td></tr><tr><td>3XL</td><td>54-56"</td></tr><tr><td>4XL</td><td>58-60"</td></tr><tr><td>5XL</td><td>62-64"</td></tr></table><p style="margin:10px 0 0;font-size:12px;color:var(--gold)">Confirm against the supplier spec sheet before going live.</p></div></details>';
     root.innerHTML =
       '<div class="media">'+(total===0?'<span class="rib" style="background:#2a2a2a;color:var(--muted)">Sold out</span>':'<span class="rib">Final sale</span>')+media+'</div>'+
       '<div class="info">'+
@@ -895,12 +896,12 @@
         '<div class="price" id="pPrice">'+money(price)+(list>price?' <s style="color:var(--dim);font-size:22px">'+money(list)+'</s>':'')+'<small>CAD</small></div>'+
         '<p class="muted" style="margin:0;max-width:52ch">'+esc(p.desc)+'</p>'+
         '<div><div class="lbl"><span>Colour</span><b id="colourLbl">'+esc(p.colours[sel.ci].n)+'</b></div><div class="swatches" style="margin-top:10px">'+sw+'</div></div>'+
-        '<div><div class="lbl"><span>Size</span><b id="sizeLbl">'+(sel.size||'—')+'</b></div><div class="sizes" style="margin-top:10px" id="sizeRow">'+sizes+'</div><div class="stockline" style="margin-top:10px" id="stockLine"></div></div>'+
+        '<div><div class="lbl"><span>Size</span><b id="sizeLbl">'+(sel.size||'')+'</b></div><div class="sizes" style="margin-top:10px" id="sizeRow">'+sizes+'</div><div class="stockline" style="margin-top:10px" id="stockLine"></div></div>'+
         '<div class="addrow"><div class="qty"><button id="qm">−</button><span id="qv">'+sel.qty+'</span><button id="qp">+</button></div><button class="btn btn-gold" id="addBtn"'+(st===0?' disabled':'')+'>'+(total===0?'Sold out':'Add to cart')+'</button></div>'+
         '<div class="fs-box"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span><b>Final sale.</b> No returns or exchanges on club merchandise. Check the size chart and the stock line above before you add it.</span></div>'+
         '<div class="details">'+chart+
-          '<details><summary>Shipping &amp; pickup</summary><div class="body">Ships from Toronto, ON. Rates are by destination and total weight (this item is about '+p.weight+' kg). Up to '+SHIP_STEP+' kg: Canada $'+SHIP.CA.base+', United States $'+SHIP.US.base+', international $'+SHIP.INTL.base+'; each extra '+SHIP_STEP+' kg adds $'+SHIP.CA.step+' / $'+SHIP.US.step+' / $'+SHIP.INTL.step+'. Free local pickup in Toronto — choose it at checkout.</div></details>'+
-          '<details><summary>Where the money goes</summary><div class="body">Every dollar of profit from this item goes to the Three Aces club fund — the Annual Picnic and the Christmas Food Drive. Nobody takes a cut.</div></details>'+
+          '<details><summary>Shipping &amp; pickup</summary><div class="body">Ships from Toronto, ON. Rates are by destination and total weight (this item is about '+p.weight+' kg). Up to '+SHIP_STEP+' kg: Canada $'+SHIP.CA.base+', United States $'+SHIP.US.base+', international $'+SHIP.INTL.base+'; each extra '+SHIP_STEP+' kg adds $'+SHIP.CA.step+' / $'+SHIP.US.step+' / $'+SHIP.INTL.step+'. Pickup in Toronto is free. Just choose it in your cart.</div></details>'+
+          '<details><summary>Where the money goes</summary><div class="body">Profit from this item goes into the Three Aces club fund, which pays for the Annual Picnic and the Christmas Food Drive.</div></details>'+
         '</div>'+
       '</div>';
     updateStockLine(p);
@@ -915,7 +916,7 @@
     var el=document.getElementById('stockLine'); if(!el) return;
     if(!sel.size){ el.textContent='No sizes left in '+p.colours[sel.ci].n+'.'; return; }
     var st=stockOf(p,sel.ci,sel.size);
-    el.textContent = st+' in stock in '+p.colours[sel.ci].n+' / '+sel.size+' — once they’re gone, they’re gone.';
+    el.textContent = st+' in stock in '+p.colours[sel.ci].n+' / '+sel.size+'. Once they’re gone, they’re gone.';
   }
 
   /* ===================== RENDER: CART ===================== */
@@ -937,14 +938,14 @@
     root.innerHTML =
       '<div><div class="lines">'+lines+'</div>'+
         '<div class="shipbox"><b>Where are we shipping?</b><div class="muted" style="font-size:13px;margin-top:4px">Order weight about '+w.toFixed(2)+' kg. The first '+SHIP_STEP+' kg is the base rate; each extra '+SHIP_STEP+' kg adds a step.</div>'+
-          '<div class="zones"><button class="zone'+(zone==='CA'&&!pickup?' active':'')+'" data-zone="CA">Canada — $'+shipCost('CA',w)+'</button><button class="zone'+(zone==='US'&&!pickup?' active':'')+'" data-zone="US">United States — $'+shipCost('US',w)+'</button><button class="zone'+(zone==='INTL'&&!pickup?' active':'')+'" data-zone="INTL">International — $'+shipCost('INTL',w)+'</button></div>'+
+          '<div class="zones"><button class="zone'+(zone==='CA'&&!pickup?' active':'')+'" data-zone="CA">Canada $'+shipCost('CA',w)+'</button><button class="zone'+(zone==='US'&&!pickup?' active':'')+'" data-zone="US">United States $'+shipCost('US',w)+'</button><button class="zone'+(zone==='INTL'&&!pickup?' active':'')+'" data-zone="INTL">International $'+shipCost('INTL',w)+'</button></div>'+
           (PICKUP_OK?'<label class="chk"><input type="checkbox" id="pickupChk"'+(pickup?' checked':'')+'><span>'+esc(PICKUP_TEXT)+'</span></label>':'')+
         '</div></div>'+
       '<div class="summary"><h3 class="display">ORDER SUMMARY</h3>'+
         '<div class="srow"><span class="muted">Subtotal</span><span>'+money(sub)+'</span></div>'+
         '<div class="srow"><span class="muted">Shipping ('+zoneName+')</span><span>'+(ship?money(ship):'Free')+'</span></div>'+
         '<div class="srow total"><span>Total</span><span>'+money(sub+ship)+' CAD</span></div>'+
-        '<div class="pay"><span class="lbl">Payment</span><button class="paybtn'+(pay==='etransfer'?' active':'')+'" data-pay="etransfer"><span>Interac e-Transfer</span><i></i></button><button class="paybtn" disabled style="opacity:.45;cursor:not-allowed"><span>Credit / Debit card &mdash; coming soon</span><i></i></button></div>'+
+        '<div class="pay"><span class="lbl">Payment</span><button class="paybtn'+(pay==='etransfer'?' active':'')+'" data-pay="etransfer"><span>Interac e-Transfer</span><i></i></button><button class="paybtn" disabled style="opacity:.45;cursor:not-allowed"><span>Credit or debit card (coming soon)</span><i></i></button></div>'+
         '<button class="btn btn-gold" id="placeBtn">Checkout</button>'+
         '<span class="note">International orders may owe duties &amp; taxes on arrival. Taxes are calculated at payment.</span>'+
       '</div>';
@@ -991,11 +992,11 @@
       }).then(function(){
         lastOrder=order; try{ localStorage.setItem('ta_last_order',JSON.stringify(order)); }catch(e){}
         cart=[]; saveCart(); updateCount(); orderView=id; location.hash='#order-'+id;
-      }).catch(function(){ sb.disabled=false; sb.textContent='Place order'; toast('Could not place the order — please try again or email '+CLUB_EMAIL+'.'); });
+      }).catch(function(){ sb.disabled=false; sb.textContent='Place order'; toast('We couldn’t place the order. Please try again or email '+CLUB_EMAIL+'.'); });
     });
   }
   var CLUB_EMAIL='info@threeaces.ca', ETRANSFER_EMAIL='info@threeaces.ca';
-  function orderStatusLabel(st){ return ({new:'Received — waiting for your e-Transfer',accepted:'Payment received — being packed',paid:'Payment received — being packed',shipped:'Shipped',ready:'Ready for pickup',done:'Complete',cancelled:'Cancelled'})[st]||st; }
+  function orderStatusLabel(st){ return ({new:'Received, waiting for your e-Transfer',accepted:'Payment received, being packed',paid:'Payment received, being packed',shipped:'Shipped',ready:'Ready for pickup',done:'Complete',cancelled:'Cancelled'})[st]||st; }
   function renderOrder(){
     var root=document.getElementById('orderRoot'), id=orderView;
     var o=(lastOrder&&lastOrder.id===id)?lastOrder:null;
@@ -1023,7 +1024,7 @@
       }
       var txt='Status: '+orderStatusLabel(st.status);
       if(st.status==='shipped'&&st.tracking) txt+=' · '+(st.carrier||'')+' tracking '+st.tracking;
-      if(st.status==='shipped'&&st.trackUrl) txt+=' — <a href="'+esc(st.trackUrl)+'" target="_blank" rel="noopener" style="text-decoration:underline">track it</a>';
+      if(st.status==='shipped'&&st.trackUrl) txt+='. <a href="'+esc(st.trackUrl)+'" target="_blank" rel="noopener" style="text-decoration:underline">track it</a>';
       el.innerHTML=txt;
       if(st.status!=='new'){ var fb=document.querySelector('#ordBody .fs-box'); if(fb) fb.remove(); }
     }).catch(function(){ var el=document.getElementById('ordStatus'); if(el) el.textContent=o?'We’ve received your order.':''; });
@@ -1084,7 +1085,7 @@
   function showSent(id,subject,body){
     var box=document.getElementById(id);
     var mail='mailto:info@threeaces.ca?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-    box.innerHTML='<b>Thanks \u2014 here\u2019s what we\u2019ll receive.</b><pre>'+esc(body)+'</pre><div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-sm btn-gold" href="'+mail+'">Open in your email app</a><button type="button" class="btn btn-sm" data-copy>Copy the message</button></div><span class="note" style="text-align:left">Preview site: on the live site this sends straight to the club. For now, it opens in your email app or you can copy it.</span>';
+    box.innerHTML='<b>Thanks! Here\u2019s what we\u2019ll receive.</b><pre>'+esc(body)+'</pre><div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-sm btn-gold" href="'+mail+'">Open in your email app</a><button type="button" class="btn btn-sm" data-copy>Copy the message</button></div><span class="note" style="text-align:left">Preview site: on the live site this sends straight to the club. For now, it opens in your email app or you can copy it.</span>';
     box.hidden=false; box.scrollIntoView({behavior:'smooth',block:'nearest'});
     box.querySelector('[data-copy]').addEventListener('click',function(){ var b=this; try{ navigator.clipboard.writeText(body).then(function(){ b.textContent='Copied'; }); }catch(e){ b.textContent='Select the text above'; } });
   }
@@ -1093,14 +1094,14 @@
     if(!f.company||!f.name||!f.email){ toast('Company, contact name and email are required.'); return; }
     if(!tiers.length){ toast('Pick at least one way to sponsor.'); return; }
     if(amount<500){ toast('$500 is the minimum sponsorship.'); return; }
-    var body='SPONSORSHIP REQUEST \u2014 10th Annual Three Aces Picnic\n\nSponsorship: '+tiers.join(' + ')+'\nAmount / value: $'+amount.toLocaleString()+'\nCompany: '+f.company+'\nContact: '+f.name+(f.title?' ('+f.title+')':'')+'\nEmail: '+f.email+'\nPhone: '+f.phone+'\nWebsite: '+f.website+'\nInstagram: '+f.instagram+'\nAddress: '+f.address+'\n\nAbout:\n'+f.about+'\n\nLogo: '+(logoName||'not attached');
-    showSent('sponsorSent','Sponsorship request \u2014 '+f.company,body);
+    var body='SPONSORSHIP REQUEST: 10th Annual Three Aces Picnic\n\nSponsorship: '+tiers.join(' + ')+'\nAmount / value: $'+amount.toLocaleString()+'\nCompany: '+f.company+'\nContact: '+f.name+(f.title?' ('+f.title+')':'')+'\nEmail: '+f.email+'\nPhone: '+f.phone+'\nWebsite: '+f.website+'\nInstagram: '+f.instagram+'\nAddress: '+f.address+'\n\nAbout:\n'+f.about+'\n\nLogo: '+(logoName||'not attached');
+    showSent('sponsorSent','Sponsorship request: '+f.company,body);
   });
   document.getElementById('contactForm').addEventListener('submit',function(e){
     e.preventDefault(); var f=fieldsOf(this);
     if(!f.name||!f.email||!f.message){ toast('Name, email and a message are required.'); return; }
     var body='From: '+f.name+' <'+f.email+'>\nTopic: '+f.topic+'\n\n'+f.message;
-    showSent('contactSent','Three Aces website \u2014 '+f.topic,body);
+    showSent('contactSent','Three Aces website: '+f.topic,body);
   });
 
   renderFeatured(); updateCount();
@@ -1120,7 +1121,7 @@
     if(!c) return;
     var pic=c.picnic||{}, fd=c.foodDrive||{}, ct=c.contact||{}, sh=c.shipping||{};
     function setHTML(sel,h){ document.querySelectorAll(sel).forEach(function(e){ e.innerHTML=h; }); }
-    if(pic.annual){ setHTML('.hero .badge','<b>'+pic.annual+'</b><span>'+ord(pic.annual).replace(/^\d+/,'')+' Annual<br>Picnic '+(pic.year||'')+'</span>'); setHTML('#view-picnic .sec-head h2','THE '+ord(pic.annual).toUpperCase()+' ANNUAL<br>THREE ACES PICNIC'); document.querySelectorAll('.fact b').forEach(function(b){ if(/ANNUAL PICNIC/.test(b.textContent)) b.nextElementSibling.textContent='The '+ord(pic.annual)+' Annual Picnic is '+(pic.dateText||'coming')+' at '+((pic.location||'Heart Lake').split(',')[0])+'.'; }); }
+    if(pic.annual){ setHTML('.hero .badge','<b>'+pic.annual+'<sup>'+ord(pic.annual).replace(/^\d+/,'')+'</sup></b><span>Annual<br>Picnic '+(pic.year||'')+'</span>'); setHTML('#view-picnic .sec-head h2','THE '+ord(pic.annual).toUpperCase()+' ANNUAL<br>THREE ACES PICNIC'); document.querySelectorAll('.fact b').forEach(function(b){ if(/ANNUAL PICNIC/.test(b.textContent)) b.nextElementSibling.textContent='The '+ord(pic.annual)+' Annual Picnic is '+(pic.dateText||'coming')+' at '+((pic.location||'Heart Lake').split(',')[0])+'.'; }); }
     if(pic.year||pic.dateText||pic.location){ var db=document.querySelector('#view-picnic .datebox'); if(db) db.innerHTML='<b>'+esc(pic.year||'')+'</b><span>'+esc((pic.location||'').split(',')[0])+'<br>'+esc(pic.dateText||'')+'</span>'; }
     if(pic.photos&&pic.photos.length){ var mo=document.querySelector('#view-picnic .mosaic'); if(mo) mo.innerHTML=pic.photos.slice(0,8).map(function(id){ return '<div><img data-file="'+esc(id)+'" alt=""></div>'; }).join(''); }
     if(fd.annual){ setHTML('#view-fooddrive h2.display',ord(fd.annual).toUpperCase()+' ANNUAL<br>CHRISTMAS FOOD DRIVE'); }
