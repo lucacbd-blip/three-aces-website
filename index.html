@@ -538,7 +538,7 @@
     <div class="wrap">
       <div class="sponsors" data-reveal id="sponsors" style="margin-top:20px;padding-top:0;border-top:none;">
         <div class="sec-head" style="margin-bottom:26px;align-items:flex-end;">
-          <div><span class="eyebrow">Our Sponsors</span><h1 class="display" style="font-size:clamp(40px,6vw,74px);margin:12px 0 0;">THANK YOU TO OUR<br>2026 PICNIC SPONSORS</h1></div>
+          <div><span class="eyebrow">Our Sponsors</span><h1 class="display" style="font-size:clamp(40px,6vw,74px);margin:12px 0 0;">THANK YOU TO OUR<br><span class="spyr">2026</span> PICNIC SPONSORS</h1></div>
           <p style="max-width:460px;">Every sponsor gets an honourable mention at the picnic, their logo on the invitation, a custom plaque, and a spot on the sponsor roll all day long. Tap a logo to visit them, and please leave them a 5-star Google review.</p>
         </div>
         <div class="logos" id="logoGrid"></div>
@@ -1159,8 +1159,9 @@
     if(sh.stepKg) SHIP_STEP=+sh.stepKg||0.5;
     if(typeof sh.pickup==='boolean') PICKUP_OK=sh.pickup;
     if(sh.pickupText) PICKUP_TEXT=sh.pickupText;
-    if(c.sponsors){ var list=Object.keys(c.sponsors).map(function(k){ return c.sponsors[k]; }).filter(function(x){ return x&&x.show!==false; }).sort(function(a,b){ return (a.order||0)-(b.order||0); });
-      if(list.length){ document.getElementById('logoGrid').innerHTML=list.map(function(x){ var href=x.url||(x.instagram?'https://www.instagram.com/'+x.instagram+'/':'#'); return '<a class="logo" href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(x.name)+'">'+(x.logoId?'<img data-file="'+esc(x.logoId)+'" alt="'+esc(x.name)+'">':'<b style="color:#141414;font-family:var(--display);font-size:20px">'+esc(x.name)+'</b>')+'<span>'+esc(x.name)+'</span></a>'; }).join(''); } }
+    if(c.sponsorsYear){ document.querySelectorAll('.spyr').forEach(function(e){ e.textContent=c.sponsorsYear; }); }
+    if(c.sponsors && Object.keys(c.sponsors).length){ var list=Object.keys(c.sponsors).map(function(k){ return c.sponsors[k]; }).filter(function(x){ return x&&x.show!==false; }).sort(function(a,b){ return (a.order||0)-(b.order||0); });
+      document.getElementById('logoGrid').innerHTML=list.length ? list.map(function(x){ var href=x.url||(x.instagram?'https://www.instagram.com/'+x.instagram+'/':'#'); return '<a class="logo" href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(x.name)+'">'+(x.logoId?'<img data-file="'+esc(x.logoId)+'" alt="'+esc(x.name)+'">':'<b style="color:#141414;font-family:var(--display);font-size:20px">'+esc(x.name)+'</b>')+'<span>'+esc(x.name)+'</span></a>'; }).join('') : '<p class="muted">This year\u2019s sponsors will be up here soon.</p>'; }
     hydrateImages();
   }
   function goLive(){
