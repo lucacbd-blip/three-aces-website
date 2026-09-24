@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#070707">
 <link rel="icon" href="logo.jpg">
 <title>Three Aces Italian Canadian Cultural Club</title>
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap">
 <style>
   :root{
@@ -358,7 +359,6 @@
 </head>
 <body>
 
-
 <div id="splash" title="Click to enter">
   <div class="crest"></div>
   <div class="line"></div>
@@ -659,14 +659,32 @@
 </section>
 
 <!-- ================= CONFIRM ================= -->
-<section id="view-confirm" class="view" hidden>
-  <div class="wrap confirm">
-    <div class="brand"><div class="mark" style="width:70px;"></div></div>
-    <span class="eyebrow">Preview only</span>
-    <h1 class="display">THIS IS WHERE THE ORDER WOULD GO THROUGH</h1>
-    <p>Nothing was charged and no order was placed &mdash; this site is a working preview. When it goes live, this step will take payment and drop the stock in the Club Manager automatically.</p>
-    <a class="btn btn-fill" href="#shop" data-view="shop">Back to the store</a>
+<section id="view-checkout" class="view" hidden>
+  <div class="wrap cart-head"><span class="eyebrow">Checkout</span><h1 class="display">YOUR DETAILS</h1><span class="muted" id="coSummary"></span></div>
+  <div class="wrap cart">
+    <form class="formblk" id="checkoutForm" novalidate>
+      <div class="fgrid">
+        <div class="field"><label>Full name</label><input name="name" required autocomplete="name"></div>
+        <div class="field"><label>Email &mdash; your order confirmation goes here</label><input name="email" type="email" required autocomplete="email"></div>
+        <div class="field"><label>Phone</label><input name="phone" type="tel" autocomplete="tel" placeholder="(000) 000-0000"></div>
+        <div class="field" id="coAddrWrap"><label>Street address</label><input name="address" autocomplete="street-address"></div>
+        <div class="field coship"><label>City</label><input name="city" autocomplete="address-level2"></div>
+        <div class="field coship"><label>Province / State</label><input name="region" autocomplete="address-level1"></div>
+        <div class="field coship"><label>Postal / ZIP code</label><input name="postal" autocomplete="postal-code"></div>
+        <div class="field coship"><label>Country</label><input name="country" autocomplete="country-name"></div>
+        <div class="field full"><label>Note for the club (optional)</label><textarea name="note" rows="2"></textarea></div>
+      </div>
+      <div class="fs-box"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg><span id="coPayNote"></span></div>
+      <label class="chk"><input type="checkbox" id="coFs"><span>I understand every item in this order is <b>final sale</b> &mdash; no returns or exchanges.</span></label>
+      <button class="btn btn-gold" type="submit" id="coSubmit" disabled>Place order</button>
+      <a class="btn" href="#cart" data-view="cart">Back to cart</a>
+    </form>
+    <div class="summary" id="coSide"></div>
   </div>
+</section>
+
+<section id="view-order" class="view" hidden>
+  <div class="wrap confirm" id="orderRoot"></div>
 </section>
 
 </main>
@@ -746,9 +764,9 @@
       var sale=it.salePct||0;
       if(/Mulitple|Multiple/.test(colour)){
         // Flex Fit Hat: size keys are "Red S-M" etc. -> split into colours
-        Object.keys(it.sizes||{}).forEach(function(k){ var mm=/^(\w+)\s+(.+)$/.exec(k); if(!mm) return; var c=getColour(p,mm[1]); c.sizes[mm[2]]={price:it.sizes[k].price,stock:it.sizes[k].stock||0,sale:sale}; });
+        Object.keys(it.sizes||{}).forEach(function(k){ var mm=/^(\w+)\s+(.+)$/.exec(k); if(!mm) return; var c=getColour(p,mm[1]); c.itemId=key; c.sizes[mm[2]]={price:it.sizes[k].price,stock:it.sizes[k].stock||0,sale:sale,key:k}; });
       } else {
-        var c=getColour(p,colour==='Champion'?'Champion':colour); if(it.photoId) c.photoId=it.photoId;
+        var c=getColour(p,colour==='Champion'?'Champion':colour); if(it.photoId) c.photoId=it.photoId; c.itemId=key;
         Object.keys(it.sizes||{}).forEach(function(k){ c.sizes[normSize(k)]={price:it.sizes[k].price,stock:it.sizes[k].stock||0,sale:sale}; });
       }
     });
@@ -774,7 +792,8 @@
   /* ===================== CART STATE ===================== */
   var cart = []; // {pid, ci, size, qty}
   try{ var saved=JSON.parse(localStorage.getItem('ta_cart')||'[]'); if(Array.isArray(saved)) cart=saved.filter(function(l){ return byId(l.pid); }); }catch(e){}
-  var zone='CA', pickup=false, pay='card';
+  var zone='CA', pickup=false, pay='etransfer', orderView=null, lastOrder=null;
+  try{ lastOrder=JSON.parse(localStorage.getItem('ta_last_order')||'null'); }catch(e){}
   function saveCart(){ try{ localStorage.setItem('ta_cart',JSON.stringify(cart)); }catch(e){} }
   function cartQty(){ return cart.reduce(function(a,l){ return a+l.qty; },0); }
   function updateCount(){ document.getElementById('cartCount').textContent=cartQty(); }
@@ -786,7 +805,7 @@
   }
 
   /* ===================== VIEWS / ROUTING ===================== */
-  var VIEWS=['home','shop','product','cart','confirm','story','picnic','fooddrive','sponsors','contact'];
+  var VIEWS=['home','shop','product','cart','checkout','order','story','picnic','fooddrive','sponsors','contact'];
   var currentProduct = P[0].id;
   function showView(name, scrollTo){
     if(VIEWS.indexOf(name)===-1) name='home';
@@ -796,11 +815,14 @@
     if(name==='shop') renderShop();
     if(name==='product') renderProduct();
     if(name==='cart') renderCart();
+    if(name==='checkout') renderCheckout();
+    if(name==='order') renderOrder();
     if(scrollTo){ var t=document.getElementById(scrollTo); if(t){ setTimeout(function(){ t.scrollIntoView({behavior:'smooth',block:'start'}); },30); return; } }
     window.scrollTo(0,0);
   }
   function syncFromHash(){
     var h=(location.hash||'#home').slice(1);
+    if(/^order-/.test(h)){ orderView=h.slice(6); showView('order'); return; }
     if(VIEWS.indexOf(h)!==-1) showView(h);
     else if(h==='sponsor') showView('sponsors','sponsor');
     else showView('home');
@@ -922,9 +944,8 @@
         '<div class="srow"><span class="muted">Subtotal</span><span>'+money(sub)+'</span></div>'+
         '<div class="srow"><span class="muted">Shipping ('+zoneName+')</span><span>'+(ship?money(ship):'Free')+'</span></div>'+
         '<div class="srow total"><span>Total</span><span>'+money(sub+ship)+' CAD</span></div>'+
-        '<div class="pay"><span class="lbl">Payment</span><button class="paybtn'+(pay==='card'?' active':'')+'" data-pay="card"><span>Credit / Debit card</span><i></i></button><button class="paybtn'+(pay==='etransfer'?' active':'')+'" data-pay="etransfer"><span>Interac e-Transfer (Canada only)</span><i></i></button></div>'+
-        '<label class="chk"><input type="checkbox" id="fsChk"><span>I understand every item in this order is <b>final sale</b> — no returns or exchanges.</span></label>'+
-        '<button class="btn btn-gold" id="placeBtn" disabled>Place order</button>'+
+        '<div class="pay"><span class="lbl">Payment</span><button class="paybtn'+(pay==='etransfer'?' active':'')+'" data-pay="etransfer"><span>Interac e-Transfer</span><i></i></button><button class="paybtn" disabled style="opacity:.45;cursor:not-allowed"><span>Credit / Debit card &mdash; coming soon</span><i></i></button></div>'+
+        '<button class="btn btn-gold" id="placeBtn">Checkout</button>'+
         '<span class="note">International orders may owe duties &amp; taxes on arrival. Taxes are calculated at payment.</span>'+
       '</div>';
     root.querySelectorAll('[data-rm]').forEach(function(b){ b.addEventListener('click', function(){ cart.splice(+b.dataset.rm,1); saveCart(); updateCount(); renderCart(); }); });
@@ -933,9 +954,79 @@
     root.querySelectorAll('[data-zone]').forEach(function(b){ b.addEventListener('click', function(){ zone=b.dataset.zone; pickup=false; renderCart(); }); });
     var pc=document.getElementById('pickupChk'); if(pc) pc.addEventListener('change', function(e){ pickup=e.target.checked; renderCart(); });
     root.querySelectorAll('[data-pay]').forEach(function(b){ b.addEventListener('click', function(){ pay=b.dataset.pay; renderCart(); }); });
-    var fs=document.getElementById('fsChk'), pb=document.getElementById('placeBtn');
-    fs.addEventListener('change', function(){ pb.disabled=!fs.checked; });
-    pb.addEventListener('click', function(){ if(pb.disabled) return; cart=[]; saveCart(); updateCount(); location.hash='#confirm'; });
+    document.getElementById('placeBtn').addEventListener('click', function(){ location.hash='#checkout'; });
+  }
+
+
+  /* ===================== CHECKOUT & ORDERS ===================== */
+  var ORDERS_URL='https://three-aces-default-rtdb.firebaseio.com/threeacesOrders.json';
+  var STATUS_URL='https://three-aces-default-rtdb.firebaseio.com/threeacesOrderStatus/';
+  function cartTotals(){ var sub=0,w=0; cart.forEach(function(l){ var p=byId(l.pid); if(!p) return; sub+=priceOf(p,l.ci,l.size)*l.qty; w+=p.weight*l.qty; }); var ship=pickup?0:shipCost(zone,w); return {sub:sub,w:w,ship:ship,total:sub+ship}; }
+  function renderCheckout(){
+    if(!cart.length){ location.hash='#cart'; return; }
+    var t=cartTotals(), zoneName=pickup?'Pickup in Toronto':SHIP[zone].label;
+    document.getElementById('coSummary').textContent=cartQty()+' item'+(cartQty()===1?'':'s')+' · '+zoneName+' · '+money(t.total)+' CAD';
+    document.querySelectorAll('#checkoutForm .coship, #coAddrWrap').forEach(function(f){ f.hidden=pickup; });
+    document.getElementById('coPayNote').innerHTML='<b>Paying by Interac e-Transfer.</b> After you place the order you’ll get an order number and the club’s e-Transfer address. We reserve your items once the transfer lands, usually the same day. Card payments are coming soon.';
+    var lines=cart.map(function(l){ var p=byId(l.pid); return '<div class="srow"><span class="muted">'+l.qty+' × '+esc(p.name)+' <small>'+esc(p.colours[l.ci].n)+' / '+esc(l.size)+'</small></span><span>'+money(priceOf(p,l.ci,l.size)*l.qty)+'</span></div>'; }).join('');
+    document.getElementById('coSide').innerHTML='<h3 class="display">ORDER SUMMARY</h3>'+lines+'<div class="srow"><span class="muted">Shipping ('+esc(zoneName)+')</span><span>'+(t.ship?money(t.ship):'Free')+'</span></div><div class="srow total"><span>Total</span><span>'+money(t.total)+' CAD</span></div><span class="note">Final sale. '+(pickup?'We’ll message you to arrange pickup in Toronto.':'Ships from Toronto, ON once payment is received.')+'</span>';
+    var fs=document.getElementById('coFs'), sb=document.getElementById('coSubmit');
+    fs.checked=false; sb.disabled=true; fs.onchange=function(){ sb.disabled=!fs.checked; };
+    var cf=document.getElementById('checkoutForm'); if(cf.dataset.wired) return; cf.dataset.wired='1';
+    var cty=cf.querySelector('[name=country]'); if(cty&&!cty.value) cty.value='Canada';
+    cf.addEventListener('submit', function(e){
+      e.preventDefault(); var f=fieldsOf(cf);
+      if(!f.name||!f.email||!/^\S+@\S+\.\S+$/.test(f.email)){ toast('Name and a valid email are required.'); return; }
+      if(!pickup && (!f.address||!f.city||!f.postal)){ toast('We need a full shipping address.'); return; }
+      var t=cartTotals(); var id='TA'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();
+      var order={ id:id, ts:Date.now(), status:'new', pay:'etransfer',
+        customer:{name:f.name,email:f.email,phone:f.phone||''},
+        ship: pickup?{method:'pickup'}:{method:'ship',zone:zone,address:f.address,city:f.city,region:f.region||'',postal:f.postal,country:f.country||''},
+        note:f.note||'', lines:cart.map(function(l){ var p=byId(l.pid); var e=entry(p,l.ci,l.size); return {itemId:(p.colours[l.ci].itemId||''),sizeKey:(e&&e.key)||l.size,product:p.name,colour:p.colours[l.ci].n,size:l.size,qty:l.qty,price:priceOf(p,l.ci,l.size)}; }),
+        subtotal:t.sub, shipping:t.ship, total:t.total, weight:Math.round(t.w*100)/100 };
+      sb.disabled=true; sb.textContent='Placing order…';
+      var pub={ status:'new', ts:order.ts, name:f.name.split(' ')[0], total:t.total, shipping:t.ship, dest:pickup?'pickup':(f.city||''), lines:order.lines.map(function(l){ return {product:l.product,colour:l.colour,size:l.size,qty:l.qty,price:l.price}; }) };
+      fetch(ORDERS_URL.replace('.json','/'+id+'.json'),{method:'PUT',body:JSON.stringify(order)}).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }).then(function(){
+        return fetch(STATUS_URL+id+'.json',{method:'PUT',body:JSON.stringify(pub)}).catch(function(){});
+      }).then(function(){
+        lastOrder=order; try{ localStorage.setItem('ta_last_order',JSON.stringify(order)); }catch(e){}
+        cart=[]; saveCart(); updateCount(); orderView=id; location.hash='#order-'+id;
+      }).catch(function(){ sb.disabled=false; sb.textContent='Place order'; toast('Could not place the order — please try again or email '+CLUB_EMAIL+'.'); });
+    });
+  }
+  var CLUB_EMAIL='info@threeaces.ca', ETRANSFER_EMAIL='info@threeaces.ca';
+  function orderStatusLabel(st){ return ({new:'Received — waiting for your e-Transfer',accepted:'Payment received — being packed',paid:'Payment received — being packed',shipped:'Shipped',ready:'Ready for pickup',done:'Complete',cancelled:'Cancelled'})[st]||st; }
+  function renderOrder(){
+    var root=document.getElementById('orderRoot'), id=orderView;
+    var o=(lastOrder&&lastOrder.id===id)?lastOrder:null;
+    root.innerHTML='<div class="brand"><div class="mark" style="width:70px;"></div></div><span class="eyebrow">Order '+esc(id||'')+'</span><h1 class="display" id="ordTitle">'+(o?'THANK YOU, '+esc(o.customer.name.split(' ')[0]).toUpperCase()+'.':'YOUR ORDER')+'</h1><p id="ordStatus" class="muted">Checking status…</p><div id="ordBody" style="text-align:left;max-width:560px;width:100%"></div><a class="btn" href="#shop" data-view="shop" style="margin-top:10px">Back to the store</a>';
+    var body=document.getElementById('ordBody');
+    if(o){
+      body.innerHTML='<div class="summary" style="position:static">'+
+        '<div class="srow"><span class="muted">Order number</span><b>'+esc(o.id)+'</b></div>'+
+        o.lines.map(function(l){ return '<div class="srow"><span class="muted">'+l.qty+' × '+esc(l.product)+' <small>'+esc(l.colour)+' / '+esc(l.size)+'</small></span><span>'+money(l.price*l.qty)+'</span></div>'; }).join('')+
+        '<div class="srow"><span class="muted">'+(o.ship.method==='pickup'?'Pickup in Toronto':'Shipping to '+esc(o.ship.city))+'</span><span>'+(o.shipping?money(o.shipping):'Free')+'</span></div>'+
+        '<div class="srow total"><span>Total</span><span>'+money(o.total)+' CAD</span></div>'+
+        (o.status==='new'?'<div class="fs-box" style="margin-top:6px"><svg viewBox="0 0 24 24"><path d="M3 7h18v10H3zM3 11h18"/></svg><span><b>To complete your order, send an Interac e-Transfer of '+money(o.total)+' to '+esc(ETRANSFER_EMAIL)+'</b> with your order number <b>'+esc(o.id)+'</b> in the message. No security question is needed if your bank offers auto-deposit; otherwise use the question <i>Club name?</i> and the answer <i>threeaces</i>. Your items are reserved as soon as the transfer arrives.</span></div>':'')+
+        '<span class="note" style="text-align:left">We’ll email '+esc(o.customer.email)+' when your transfer arrives and again when it ships. Bookmark this page to check on your order any time.</span></div>';
+    }
+    fetch(STATUS_URL+encodeURIComponent(id)+'.json',{cache:'no-store'}).then(function(r){ return r.json(); }).then(function(st){
+      var el=document.getElementById('ordStatus'); if(!el) return;
+      if(!st){ el.textContent=o?'We’ve received your order.':'We couldn’t find that order number. Check the link in your email, or contact '+CLUB_EMAIL+'.'; return; }
+      if(!o && st.lines){
+        var tt=document.getElementById('ordTitle'); if(tt&&st.name) tt.textContent='THANK YOU, '+st.name.toUpperCase()+'.';
+        body.innerHTML='<div class="summary" style="position:static"><div class="srow"><span class="muted">Order number</span><b>'+esc(id)+'</b></div>'+
+          st.lines.map(function(l){ return '<div class="srow"><span class="muted">'+l.qty+' × '+esc(l.product)+' <small>'+esc(l.colour)+' / '+esc(l.size)+'</small></span><span>'+money(l.price*l.qty)+'</span></div>'; }).join('')+
+          '<div class="srow"><span class="muted">'+(st.dest==='pickup'?'Pickup in Toronto':'Shipping to '+esc(st.dest||''))+'</span><span>'+(st.shipping?money(st.shipping):'Free')+'</span></div>'+
+          '<div class="srow total"><span>Total</span><span>'+money(st.total||0)+' CAD</span></div>'+
+          (st.status==='new'?'<div class="fs-box" style="margin-top:6px"><svg viewBox="0 0 24 24"><path d="M3 7h18v10H3zM3 11h18"/></svg><span><b>To complete your order, send an Interac e-Transfer of '+money(st.total||0)+' to '+esc(ETRANSFER_EMAIL)+'</b> with your order number <b>'+esc(id)+'</b> in the message. No security question is needed if your bank offers auto-deposit; otherwise use the question <i>Club name?</i> and the answer <i>threeaces</i>.</span></div>':'')+'</div>';
+      }
+      var txt='Status: '+orderStatusLabel(st.status);
+      if(st.status==='shipped'&&st.tracking) txt+=' · '+(st.carrier||'')+' tracking '+st.tracking;
+      if(st.status==='shipped'&&st.trackUrl) txt+=' — <a href="'+esc(st.trackUrl)+'" target="_blank" rel="noopener" style="text-decoration:underline">track it</a>';
+      el.innerHTML=txt;
+      if(st.status!=='new'){ var fb=document.querySelector('#ordBody .fs-box'); if(fb) fb.remove(); }
+    }).catch(function(){ var el=document.getElementById('ordStatus'); if(el) el.textContent=o?'We’ve received your order.':''; });
   }
 
   /* ===================== TOAST ===================== */
@@ -1037,7 +1128,7 @@
     if(fd.blurb){ var bp=document.querySelector('#view-fooddrive .inner > div > p'); if(bp) bp.textContent=fd.blurb; }
     if(fd.gofundme){ var b=document.getElementById('donateBtn'), n=document.getElementById('donateNote'); b.href=fd.gofundme; b.target='_blank'; b.rel='noopener'; b.removeAttribute('data-view'); b.textContent='Donate on GoFundMe'; b.className='btn btn-gold'; b.removeAttribute('aria-disabled'); b.style.opacity=''; b.style.pointerEvents=''; if(n) n.textContent='Opens GoFundMe in a new tab'; }
     if(c.ticker&&c.ticker.length){ var tt=document.getElementById('tickerTrack'); var one=c.ticker.map(function(t){ return '<span><i></i>'+esc(t)+'</span>'; }).join(''); tt.innerHTML=one+one; }
-    if(ct.email){ document.querySelectorAll('.ft-col span, .contact-list span').forEach(function(e){ if(/@threeaces\.ca$/.test(e.textContent.trim())) e.textContent=ct.email; }); }
+    if(ct.email){ CLUB_EMAIL=ct.email; ETRANSFER_EMAIL=(c.orders&&c.orders.etransferEmail)||ct.email; document.querySelectorAll('.ft-col span, .contact-list span').forEach(function(e){ if(/@threeaces\.ca$/.test(e.textContent.trim())) e.textContent=ct.email; }); }
     if(ct.instagram){ document.querySelectorAll('a[href*="instagram.com"]').forEach(function(a){ a.href='https://www.instagram.com/'+ct.instagram+'/'; if(/^@/.test(a.textContent.trim())) a.textContent='@'+ct.instagram; }); }
     if(sh.zones){ Object.keys(sh.zones).forEach(function(k){ if(SHIP[k]){ SHIP[k].base=+sh.zones[k].base||SHIP[k].base; SHIP[k].step=+sh.zones[k].step||SHIP[k].step; if(sh.zones[k].label) SHIP[k].label=sh.zones[k].label; } }); }
     if(sh.stepKg) SHIP_STEP=+sh.stepKg||0.5;
