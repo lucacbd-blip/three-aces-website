@@ -436,7 +436,7 @@
       <div class="facts" data-reveal style="margin-top:0;">
         <a class="fact" href="#story" data-view="story"><b>WHO WE ARE</b><span>Founded in Toronto in 2013 to keep the Italian traditions alive and families together. Everybody is welcome.</span><span style="color:var(--gold);margin-top:6px;">Read our story &rarr;</span></a>
         <a class="fact" href="#picnic" data-view="picnic"><b>THE ANNUAL PICNIC</b><span>Nine down. The 10th Annual Picnic is summer 2027 at Heart Lake.</span><span style="color:var(--gold);margin-top:6px;">See the picnic &rarr;</span></a>
-        <a class="fact" href="#fooddrive" data-view="fooddrive"><b>CHRISTMAS FOOD DRIVE</b><span>$4,517 raised last year, 100% turned into grocery gift cards at St. Philip Neri.</span><span style="color:var(--gold);margin-top:6px;">The food drive &rarr;</span></a>
+        <a class="fact" href="#fooddrive" data-view="fooddrive"><b>CHRISTMAS FOOD DRIVE</b><span>$4,517 raised at the <span class="fdyr">2025</span> food drive, 100% turned into grocery gift cards at St. Philip Neri.</span><span style="color:var(--gold);margin-top:6px;">The food drive &rarr;</span></a>
         <a class="fact" href="#sponsors" data-view="sponsors"><b>OUR SPONSORS</b><span>The businesses that make the picnic possible, and how you can become one.</span><span style="color:var(--gold);margin-top:6px;">Meet the sponsors &rarr;</span></a>
       </div>
     </div>
@@ -459,7 +459,7 @@
         <p>You don&rsquo;t have to be Italian. Everybody is welcome at our table. We're run by volunteers. Nobody draws a salary, and every dollar from the gear we sell goes back into the picnic, the food drive and the community.</p>
         <div class="stats">
           <div class="stat"><b>2013</b><span>Founded in Toronto</span></div>
-          <div class="stat"><b>$4,517</b><span>Raised last Christmas</span></div>
+          <div class="stat"><b>$4,517</b><span><span class="fdyr">2025</span> Christmas Food Drive</span></div>
           <div class="stat"><b>100%</b><span>Back into the community</span></div>
         </div>
       </div>
@@ -509,9 +509,8 @@
         <h2 class="display">6TH ANNUAL<br>CHRISTMAS FOOD DRIVE</h2>
         <p>Every December, Three Aces goes to the St. Philip Neri food bank in Toronto and hands out grocery gift cards to families who need them. 100% of what comes in goes back into the community, into the gift cards and the cost of the day itself. Nobody at Three Aces takes a dollar.</p>
         <div class="bignum">
-          <div><b>$4,517</b><span>Raised in 2025</span></div>
+          <div><b>$4,517</b><span>Raised in <span class="fdyr">2025</span></span></div>
           <div><b>100%</b><span>Goes back to the community</span></div>
-          <div><b>0</b><span>Kept by the club</span></div>
         </div>
         <div class="steps">
           <div><b>01</b><span>We launch the GoFundMe in November and the whole club gets behind it.</span></div>
@@ -1150,6 +1149,7 @@
     if(pic.year||pic.dateText||pic.location){ var db=document.querySelector('#view-picnic .datebox'); if(db) db.innerHTML='<b>'+esc(pic.year||'')+'</b><span>'+esc((pic.location||'').split(',')[0])+'<br>'+esc(pic.dateText||'')+'</span>'; }
     if(pic.photos&&pic.photos.length){ var mo=document.querySelector('#view-picnic .mosaic'); if(mo) mo.innerHTML=pic.photos.slice(0,8).map(function(id){ return '<div><img data-file="'+esc(id)+'" alt=""></div>'; }).join(''); }
     if(fd.annual){ setHTML('#view-fooddrive h2.display',ord(fd.annual).toUpperCase()+' ANNUAL<br>CHRISTMAS FOOD DRIVE'); }
+    if(fd.lastYear){ document.querySelectorAll('.fdyr').forEach(function(e){ e.textContent=fd.lastYear; }); }
     if(fd.lastYearTotal){ var m='$'+(+fd.lastYearTotal).toLocaleString(); document.querySelectorAll('#view-fooddrive .bignum b, #view-story .stat b').forEach(function(b){ if(/^\$[\d,]+$/.test(b.textContent)) b.textContent=m; }); document.querySelectorAll('.fact span').forEach(function(sp){ sp.textContent=sp.textContent.replace(/\$[\d,]+ raised/,m+' raised'); }); }
     if(fd.blurb){ var bp=document.querySelector('#view-fooddrive .inner > div > p'); if(bp) bp.textContent=fd.blurb; }
     if(fd.gofundme){ var b=document.getElementById('donateBtn'), n=document.getElementById('donateNote'); b.href=fd.gofundme; b.target='_blank'; b.rel='noopener'; b.removeAttribute('data-view'); b.textContent='Donate on GoFundMe'; b.className='btn btn-gold'; b.removeAttribute('aria-disabled'); b.style.opacity=''; b.style.pointerEvents=''; if(n) n.textContent='Opens GoFundMe in a new tab'; }
