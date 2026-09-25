@@ -182,6 +182,10 @@
   .logo{ flex:0 0 calc(20% - 10px); min-width:150px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid var(--line2); padding:18px 22px; height:130px; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; position:relative; }
   .logo:hover{ transform:translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.5); }
   .logo img{ max-width:100%; max-height:100%; object-fit:contain; }
+  .logo.wide{ flex-basis:calc(40% - 12px); padding:10px 12px; }
+  div.logo{ cursor:default; }
+  @media (max-width:860px){ .logo.wide{ flex-basis:calc(66.66% - 8px); } }
+  @media (max-width:520px){ .logo.wide{ flex-basis:100%; } }
   .logo span{ position:absolute; left:0; right:0; bottom:0; background:rgba(7,7,7,.85); color:var(--text); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; text-align:center; padding:6px 8px; opacity:0; transition:opacity .25s; }
   .logo:hover span{ opacity:1; }
   /* forms */
@@ -1097,9 +1101,13 @@
     {n:'Funtimes Event Rentals',img:'sp-funtimes.jpg',url:'https://www.funtimeseventrentals.ca',ig:'funtimeseventrentals'},
     {n:'Belvedere Property Management & Inspections',img:'sp-belvedere.jpg',url:'https://www.na-ahi.org',ig:'belvedere_properties'},
     {n:'Joseph & Mike\u2019s Barber Shop',img:'sp-josephmike.jpg',url:'https://www.josephandmikesbarbershop.com',ig:'josephandmikes_.barbershop1966'},
-    {n:'Tony & Adriana Puzzo',img:'sp-puzzo.jpg',url:'https://www.teampuzzo.ca'}
+    {n:'Tony & Adriana Puzzo',img:'sp-puzzo.jpg',url:''}
   ];
-  document.getElementById('logoGrid').innerHTML=SPONSORS.map(function(x){ return '<a class="logo" href="'+x.url+'" target="_blank" rel="noopener" title="'+esc(x.n)+'"><img src="'+x.img+'" alt="'+esc(x.n)+'" loading="lazy"><span>'+esc(x.n)+'</span></a>'; }).join('');
+  function logoTile(name,href,imgHtml){ var inner=imgHtml+'<span>'+esc(name)+'</span>';
+    return href ? '<a class="logo" href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(name)+'">'+inner+'</a>' : '<div class="logo" title="'+esc(name)+'">'+inner+'</div>'; }
+  function widenLogos(){ document.querySelectorAll('#logoGrid .logo img').forEach(function(im){ if(im.dataset.w) return; im.dataset.w='1'; var f=function(){ if(im.naturalWidth && im.naturalWidth/im.naturalHeight>2.6) im.parentNode.classList.add('wide'); }; im.addEventListener('load',f); if(im.complete) f(); }); }
+  document.getElementById('logoGrid').innerHTML=SPONSORS.map(function(x){ return logoTile(x.n, x.url||(x.ig?'https://www.instagram.com/'+x.ig+'/':''), '<img src="'+x.img+'" alt="'+esc(x.n)+'" loading="lazy">'); }).join('');
+  widenLogos();
 
   /* ===================== FORMS ===================== */
   var tiers=['Cash / Gift Cards'];
@@ -1200,8 +1208,8 @@
     if(c.forms){ if(c.forms.to) FORMS.to=c.forms.to; if(typeof c.forms.cc==='string') FORMS.cc=c.forms.cc; }
     if(c.sponsorsYear){ document.querySelectorAll('.spyr').forEach(function(e){ e.textContent=c.sponsorsYear; }); }
     if(c.sponsors && Object.keys(c.sponsors).length){ var list=Object.keys(c.sponsors).map(function(k){ return c.sponsors[k]; }).filter(function(x){ return x&&x.show!==false; }).sort(function(a,b){ return (a.order||0)-(b.order||0); });
-      document.getElementById('logoGrid').innerHTML=list.length ? list.map(function(x){ var href=x.url||(x.instagram?'https://www.instagram.com/'+x.instagram+'/':'#'); return '<a class="logo" href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(x.name)+'">'+(x.logoId?'<img data-file="'+esc(x.logoId)+'" alt="'+esc(x.name)+'">':'<b style="color:#141414;font-family:var(--display);font-size:20px">'+esc(x.name)+'</b>')+'<span>'+esc(x.name)+'</span></a>'; }).join('') : '<p class="muted">This year\u2019s sponsors will be up here soon.</p>'; }
-    hydrateImages();
+      document.getElementById('logoGrid').innerHTML=list.length ? list.map(function(x){ return logoTile(x.name, x.url||(x.instagram?'https://www.instagram.com/'+x.instagram+'/':''), x.logoId?'<img data-file="'+esc(x.logoId)+'" alt="'+esc(x.name)+'">':'<b style="color:#141414;font-family:var(--display);font-size:20px">'+esc(x.name)+'</b>'); }).join('') : '<p class="muted">This year\u2019s sponsors will be up here soon.</p>'; }
+    hydrateImages(); widenLogos();
   }
   function goLive(){
     fbGet('threeacesPublic').then(function(pub){
