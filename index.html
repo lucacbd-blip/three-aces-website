@@ -563,7 +563,7 @@
             <div><b>04</b><span>Your logo on the sponsor roll on the big screen for the entire event, and on this website.</span></div>
           </div>
         </div>
-        <form class="formblk" id="sponsorForm" novalidate>
+        <form class="formblk" id="sponsorForm" novalidate><input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none">
           <div class="field"><label>How would you like to sponsor? Pick one or more</label></div>
           <div class="tiers" id="tiers">
             <div class="tier active" data-tier="Cash / Gift Cards"><b>&#10003;</b><strong>Cash / Gift Cards</strong><span>Goes towards event costs like the venue and the tent.</span></div>
@@ -614,7 +614,7 @@
           <div><b>Instagram</b><span><a href="https://www.instagram.com/three_aces_italian/" target="_blank" rel="noopener" style="text-decoration:underline">@three_aces_italian</a></span></div>
           <div><b>Based in</b><span>Toronto, Ontario</span></div>
         </div>
-        <form class="formblk" id="contactForm" novalidate>
+        <form class="formblk" id="contactForm" novalidate><input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none">
           <div class="fgrid">
             <div class="field"><label>Name</label><input name="name" required></div>
             <div class="field"><label>Email</label><input name="email" type="email" required></div>
@@ -1012,6 +1012,13 @@
         return fetch(STATUS_URL+id+'.json',{method:'PUT',body:JSON.stringify(pub)}).catch(function(){});
       }).then(function(){
         lastOrder=order; try{ localStorage.setItem('ta_last_order',JSON.stringify(order)); }catch(e){}
+        try{ var link=location.origin+location.pathname+'#order-'+id;
+          sendForm('New web order '+id+': '+money(order.total), {'Order':id,'Customer':order.customer.name,'email':order.customer.email,'Phone':order.customer.phone,
+            'Items':order.lines.map(function(l){ return l.qty+' x '+l.product+' ('+l.colour+', '+l.size+') '+money(l.price*l.qty); }).join(' | '),
+            'Shipping':order.ship.method==='pickup'?'Pickup in Toronto':money(order.shipping)+' to '+[order.ship.address,order.ship.city,order.ship.region,order.ship.postal,order.ship.country].filter(Boolean).join(', '),
+            'Total':money(order.total)+' CAD','Note':order.note,'Order page':link},
+            {autoresponse:'Thanks for your order '+id+'. To complete it, send an Interac e-Transfer of '+money(order.total)+' to '+ETRANSFER_EMAIL+' with your order number '+id+' in the message. We reserve your items when the transfer arrives and will email you when it ships. Check your order any time: '+link+' Grazie! Three Aces Italian Canadian Cultural Club'}).catch(function(){});
+        }catch(e){}
         cart=[]; saveCart(); updateCount(); orderView=id; location.hash='#order-'+id;
       }).catch(function(){ sb.disabled=false; sb.textContent='Place order'; toast('We couldn’t place the order. Please try again or email '+CLUB_EMAIL+'.'); });
     });
@@ -1030,7 +1037,7 @@
         '<div class="srow"><span class="muted">'+(o.ship.method==='pickup'?'Pickup in Toronto':'Shipping to '+esc(o.ship.city))+'</span><span>'+(o.shipping?money(o.shipping):'Free')+'</span></div>'+
         '<div class="srow total"><span>Total</span><span>'+money(o.total)+' CAD</span></div>'+
         (o.status==='new'?'<div class="fs-box" style="margin-top:6px"><svg viewBox="0 0 24 24"><path d="M3 7h18v10H3zM3 11h18"/></svg><span><b>To complete your order, send an Interac e-Transfer of '+money(o.total)+' to '+esc(ETRANSFER_EMAIL)+'</b> with your order number <b>'+esc(o.id)+'</b> in the message. No security question is needed if your bank offers auto-deposit; otherwise use the question <i>Club name?</i> and the answer <i>threeaces</i>. Your items are reserved as soon as the transfer arrives.</span></div>':'')+
-        '<span class="note" style="text-align:left">We’ll email '+esc(o.customer.email)+' when your transfer arrives and again when it ships. Bookmark this page to check on your order any time.</span></div>';
+        '<span class="note" style="text-align:left">We’ve emailed these details to '+esc(o.customer.email)+' and will email you again when it ships. Bookmark this page to check on your order any time.</span></div>';
     }
     fetch(STATUS_URL+encodeURIComponent(id)+'.json',{cache:'no-store'}).then(function(r){ return r.json(); }).then(function(st){
       var el=document.getElementById('ordStatus'); if(!el) return;
@@ -1103,26 +1110,56 @@
   var logoName='';
   document.getElementById('logoFile').addEventListener('change',function(e){ var f=e.target.files[0]; if(!f) return; logoName=f.name; document.getElementById('logoTxt').textContent=f.name+' attached'; var r=new FileReader(); r.onload=function(){ var im=document.getElementById('logoPreview'); im.src=r.result; im.hidden=false; }; r.readAsDataURL(f); });
   function fieldsOf(form){ var o={}; Array.prototype.forEach.call(form.elements,function(el){ if(el.name) o[el.name]=el.value.trim(); }); return o; }
-  function showSent(id,subject,body){
-    var box=document.getElementById(id);
-    var mail='mailto:info@threeaces.ca?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-    box.innerHTML='<b>Thanks! Here\u2019s what we\u2019ll receive.</b><pre>'+esc(body)+'</pre><div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-sm btn-gold" href="'+mail+'">Open in your email app</a><button type="button" class="btn btn-sm" data-copy>Copy the message</button></div><span class="note" style="text-align:left">Preview site: on the live site this sends straight to the club. For now, it opens in your email app or you can copy it.</span>';
-    box.hidden=false; box.scrollIntoView({behavior:'smooth',block:'nearest'});
-    box.querySelector('[data-copy]').addEventListener('click',function(){ var b=this; try{ navigator.clipboard.writeText(body).then(function(){ b.textContent='Copied'; }); }catch(e){ b.textContent='Select the text above'; } });
+  /* Forms send through FormSubmit (free), chosen by the club. Everything goes to
+     FORMS.to with a copy to FORMS.cc; both can be changed in Club Manager >
+     Website > Ticker & contact. */
+  var FORMS={to:'info@threeaces.ca', cc:'luca@curalli.com'};
+  function sendForm(subject, fields, opts){
+    opts=opts||{};
+    var fd=new FormData();
+    fd.append('_subject',subject); fd.append('_template','table'); fd.append('_captcha','false');
+    if(FORMS.cc) fd.append('_cc',FORMS.cc);
+    if(opts.autoresponse) fd.append('_autoresponse',opts.autoresponse);
+    Object.keys(fields).forEach(function(k){ var v=fields[k]; if(v!==undefined && v!==null && v!=='') fd.append(k,v); });
+    if(opts.file) fd.append('attachment',opts.file,opts.file.name);
+    return fetch('https://formsubmit.co/ajax/'+encodeURIComponent(FORMS.to),{method:'POST',headers:{'Accept':'application/json'},body:fd})
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok || !(j.success===true||j.success==='true')) throw new Error(j.message||('HTTP '+r.status)); return j; }); })
+      .catch(function(err){ if(opts.file){ fields['Logo']=(fields['Logo']||'')+' (the attachment did not come through, ask them to email it)'; return sendForm(subject,fields,{autoresponse:opts.autoresponse}); } throw err; });
   }
+  function showSent(id,ok,name,email,body){
+    var box=document.getElementById(id);
+    if(ok){ box.innerHTML='<b>Thanks'+(name?', '+esc(name.split(' ')[0]):'')+'. It&rsquo;s on its way.</b><span>We&rsquo;ll get back to you at '+esc(email)+'. You&rsquo;ll also get a short email confirming we have it.</span>'; }
+    else{ box.innerHTML='<b>Sorry, that didn&rsquo;t go through.</b><span>Please email us at <b>'+esc(CLUB_EMAIL)+'</b>. Here&rsquo;s your message so you can copy it:</span><pre>'+esc(body)+'</pre><div><button type="button" class="btn btn-sm" data-copy>Copy the message</button></div>';
+      box.querySelector('[data-copy]').addEventListener('click',function(){ var b=this; try{ navigator.clipboard.writeText(body).then(function(){ b.textContent='Copied'; }); }catch(e){ b.textContent='Select the text above'; } }); }
+    box.hidden=false; box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function busy(form,on,label){ var b=form.querySelector('button[type=submit]'); if(!b) return; if(on){ b.dataset.lbl=b.textContent; b.disabled=true; b.textContent='Sending…'; } else { b.disabled=false; b.textContent=b.dataset.lbl||label; } }
   document.getElementById('sponsorForm').addEventListener('submit',function(e){
-    e.preventDefault(); var f=fieldsOf(this);
-    if(!f.company||!f.name||!f.email){ toast('Company, contact name and email are required.'); return; }
+    e.preventDefault(); var form=this, f=fieldsOf(form);
+    if(f._honey) return;
+    if(!f.company||!f.name||!f.email||!/^\S+@\S+\.\S+$/.test(f.email)){ toast('Company, contact name and a valid email are required.'); return; }
     if(!tiers.length){ toast('Pick at least one way to sponsor.'); return; }
     if(amount<500){ toast('$500 is the minimum sponsorship.'); return; }
-    var body='SPONSORSHIP REQUEST: 10th Annual Three Aces Picnic\n\nSponsorship: '+tiers.join(' + ')+'\nAmount / value: $'+amount.toLocaleString()+'\nCompany: '+f.company+'\nContact: '+f.name+(f.title?' ('+f.title+')':'')+'\nEmail: '+f.email+'\nPhone: '+f.phone+'\nWebsite: '+f.website+'\nInstagram: '+f.instagram+'\nAddress: '+f.address+'\n\nAbout:\n'+f.about+'\n\nLogo: '+(logoName||'not attached');
-    showSent('sponsorSent','Sponsorship request: '+f.company,body);
+    var fields={'Sponsorship':tiers.join(' + '),'Amount / value':'$'+amount.toLocaleString(),'Company':f.company,'Contact':f.name+(f.title?' ('+f.title+')':''),'email':f.email,'Phone':f.phone,'Website':f.website,'Instagram':f.instagram,'Address':f.address,'About':f.about,'Logo':logoName||'not attached'};
+    var body=Object.keys(fields).map(function(k){ return (k==='email'?'Email':k)+': '+fields[k]; }).join('\n');
+    var file=document.getElementById('logoFile').files[0]||null;
+    busy(form,true);
+    sendForm('Sponsorship request: '+f.company, fields, {file:file, autoresponse:'Thank you for your interest in sponsoring the Three Aces Annual Picnic. We got your request and will be in touch within a couple of days. Grazie! Three Aces Italian Canadian Cultural Club'})
+      .then(function(){ showSent('sponsorSent',true,f.name,f.email); form.reset(); document.getElementById('logoTxt').textContent='Click to attach your logo (PNG or JPG)'; document.getElementById('logoPreview').hidden=true; logoName=''; })
+      .catch(function(){ showSent('sponsorSent',false,f.name,f.email,body); })
+      .then(function(){ busy(form,false,'Send sponsorship request'); });
   });
   document.getElementById('contactForm').addEventListener('submit',function(e){
-    e.preventDefault(); var f=fieldsOf(this);
-    if(!f.name||!f.email||!f.message){ toast('Name, email and a message are required.'); return; }
+    e.preventDefault(); var form=this, f=fieldsOf(form);
+    if(f._honey) return;
+    if(!f.name||!f.email||!f.message||!/^\S+@\S+\.\S+$/.test(f.email)){ toast('Name, a valid email and a message are required.'); return; }
+    var fields={'Name':f.name,'email':f.email,'Topic':f.topic,'Message':f.message};
     var body='From: '+f.name+' <'+f.email+'>\nTopic: '+f.topic+'\n\n'+f.message;
-    showSent('contactSent','Three Aces website: '+f.topic,body);
+    busy(form,true);
+    sendForm('Three Aces website: '+f.topic+' from '+f.name, fields, {autoresponse:'Thanks for reaching out to Three Aces. We got your message and will get back to you soon. Three Aces Italian Canadian Cultural Club'})
+      .then(function(){ showSent('contactSent',true,f.name,f.email); form.reset(); })
+      .catch(function(){ showSent('contactSent',false,f.name,f.email,body); })
+      .then(function(){ busy(form,false,'Send message'); });
   });
 
   renderFeatured(); updateCount();
@@ -1160,6 +1197,7 @@
     if(sh.stepKg) SHIP_STEP=+sh.stepKg||0.5;
     if(typeof sh.pickup==='boolean') PICKUP_OK=sh.pickup;
     if(sh.pickupText) PICKUP_TEXT=sh.pickupText;
+    if(c.forms){ if(c.forms.to) FORMS.to=c.forms.to; if(typeof c.forms.cc==='string') FORMS.cc=c.forms.cc; }
     if(c.sponsorsYear){ document.querySelectorAll('.spyr').forEach(function(e){ e.textContent=c.sponsorsYear; }); }
     if(c.sponsors && Object.keys(c.sponsors).length){ var list=Object.keys(c.sponsors).map(function(k){ return c.sponsors[k]; }).filter(function(x){ return x&&x.show!==false; }).sort(function(a,b){ return (a.order||0)-(b.order||0); });
       document.getElementById('logoGrid').innerHTML=list.length ? list.map(function(x){ var href=x.url||(x.instagram?'https://www.instagram.com/'+x.instagram+'/':'#'); return '<a class="logo" href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(x.name)+'">'+(x.logoId?'<img data-file="'+esc(x.logoId)+'" alt="'+esc(x.name)+'">':'<b style="color:#141414;font-family:var(--display);font-size:20px">'+esc(x.name)+'</b>')+'<span>'+esc(x.name)+'</span></a>'; }).join('') : '<p class="muted">This year\u2019s sponsors will be up here soon.</p>'; }
