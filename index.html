@@ -179,7 +179,7 @@
   .fact span{ font-size:13.5px; color:var(--muted); }
   .sponsors{ margin-top:44px; padding-top:30px; border-top:1px solid var(--line); }
   .logos{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; }
-  .logo{ flex:0 0 calc(20% - 10px); min-width:150px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid var(--line2); padding:18px 22px; height:130px; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; position:relative; }
+  .logo{ flex:0 0 calc(25% - 9px); min-width:150px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid var(--line2); padding:8px; aspect-ratio:3/2; height:auto; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; position:relative; }
   .logo:hover{ transform:translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.5); }
   .logo img{ max-width:100%; max-height:100%; object-fit:contain; }
   div.logo{ cursor:default; }
@@ -212,7 +212,7 @@
   .contact-list{ display:flex; flex-direction:column; gap:22px; }
   .contact-list b{ display:block; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
   .contact-list span{ font-size:18px; }
-  @media (max-width:860px){ .logo{ flex-basis:calc(33.33% - 8px); } .contact-grid{ grid-template-columns:1fr; } .fgrid{ grid-template-columns:1fr; } .field .full{ grid-column:auto; } .tiers{ grid-template-columns:1fr; } }
+  @media (max-width:860px){ .logo{ flex-basis:calc(50% - 6px); min-width:0; } .contact-grid{ grid-template-columns:1fr; } .fgrid{ grid-template-columns:1fr; } .field .full{ grid-column:auto; } .tiers{ grid-template-columns:1fr; } }
   .datebox{ display:inline-flex; align-items:center; gap:18px; border:1px solid rgba(214,178,94,.5); padding:14px 20px; margin-top:26px; }
   .datebox b{ font-family:var(--display); font-size:34px; color:var(--gold); line-height:1; }
   .datebox span{ font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); line-height:1.5; }
@@ -227,12 +227,7 @@
   .bignum{ display:flex; gap:34px; flex-wrap:wrap; margin:30px 0; }
   .bignum div b{ display:block; font-family:var(--display); font-size:64px; color:var(--gold); line-height:1; }
   .bignum div span{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
-  .fd .photos{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .fd .photos div{ height:300px; overflow:hidden; border:1px solid var(--line); }
-  .fd .photos div:first-child{ grid-column:span 2; height:300px; }
-  .fd .photos img{ width:100%; height:100%; object-fit:cover; object-position:50% 30%; }
-  .fd .photos div:nth-child(2) img{ object-position:0% 35%; }
-  @media (max-width:600px){ .fd .photos{ grid-template-columns:1fr; } .fd .photos div:first-child{ grid-column:auto; } .fd .photos div{ height:260px; } }
+  .gal.fdgal{ columns:2 160px; }
   .steps{ display:flex; flex-direction:column; gap:0; margin-top:26px; border-top:1px solid var(--line); }
   .steps div{ display:grid; grid-template-columns:44px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); align-items:baseline; }
   .steps b{ font-family:var(--display); font-size:26px; color:var(--gold); }
@@ -538,11 +533,7 @@
           <span class="muted" id="donateNote" style="font-size:13px;">2026 campaign launches in November</span>
         </div>
       </div>
-      <div class="photos" data-reveal>
-        <div><img src="fd_santa.jpg" alt="The club with Santa at the December hand-out"></div>
-        <div><img src="fd_truck.jpg" alt="Santa with two of the kids"></div>
-        <div><img src="fd_boxes.jpg" alt="Members at the food bank tent"></div>
-      </div>
+      <div data-reveal><div class="gal fdgal" id="fdGrid"></div><div style="margin-top:14px;display:flex;justify-content:center;"><button class="btn btn-sm" id="fdMore" type="button" hidden>Show all photos</button></div><p class="note" style="text-align:left;margin-top:10px">Tap any photo to see it bigger, then use the arrows to flip through.</p></div>
     </div>
   </section>
 
@@ -1182,31 +1173,37 @@
   });
 
 
-  /* ===================== PICNIC GALLERY ===================== */
-  (function(){
-    var HERO=['g_kids','g_sponsors','g_bocce','g_ironman','g_pasta','g_tent2','g_plaque'], N=HERO.length+96, SHOW=21, shown=0, grid=document.getElementById('galGrid'), more=document.getElementById('galMore');
-    function pad(n){ return ('00'+n).slice(-3); }
-    function full(i){ return i<HERO.length ? ''+HERO[i]+'.jpg' : 'gal/pic'+pad(i-HERO.length)+'.jpg'; }
-    function thumb(i){ return i<HERO.length ? ''+HERO[i]+'.jpg' : 'gal/pic'+pad(i-HERO.length)+'t.jpg'; }
-    function render(upto){ var h=''; for(var i=shown;i<upto;i++) h+='<button type="button" data-i="'+i+'" aria-label="Open photo '+(i+1)+' of '+N+'"><img src="'+thumb(i)+'" alt="Three Aces picnic photo '+(i+1)+'" loading="lazy"></button>'; grid.insertAdjacentHTML('beforeend',h); shown=upto; if(shown>=N) more.hidden=true; else more.textContent='Show all '+N+' photos'; }
+  /* ===================== PHOTO GALLERIES (picnic + food drive) ===================== */
+  function makeGallery(gridId, moreId, items, SHOW, label){
+    var N=items.length, shown=0, grid=document.getElementById(gridId), more=document.getElementById(moreId);
+    if(!grid) return;
+    function render(upto){ var h=''; for(var i=shown;i<upto;i++) h+='<button type="button" data-i="'+i+'" aria-label="Open photo '+(i+1)+' of '+N+'"><img src="'+items[i][1]+'" alt="'+label+' photo '+(i+1)+'" loading="lazy"></button>'; grid.insertAdjacentHTML('beforeend',h); shown=upto; if(more){ if(shown>=N) more.hidden=true; else { more.hidden=false; more.textContent='Show all '+N+' photos'; } } }
     render(Math.min(SHOW,N));
-    more.addEventListener('click',function(){ render(N); });
+    if(more) more.addEventListener('click',function(){ render(N); });
     var lb=null, cur=0, tx=null;
-    function show(i){ cur=(i+N)%N; lb.querySelector('img').src=full(cur); lb.querySelector('.count').textContent=(cur+1)+' / '+N; [cur+1,cur-1].forEach(function(j){ var p=new Image(); p.src=full((j+N)%N); }); }
+    function show(i){ cur=(i+N)%N; lb.querySelector('img').src=items[cur][0]; lb.querySelector('.count').textContent=(cur+1)+' / '+N; [cur+1,cur-1].forEach(function(j){ var p=new Image(); p.src=items[(j+N)%N][0]; }); }
     function open(i){
-      if(!lb){ lb=document.createElement('div'); lb.className='lb'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-label','Picnic photos');
+      if(!lb){ lb=document.createElement('div'); lb.className='lb'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-label',label+' photos');
         lb.innerHTML='<span class="count"></span><button class="close" type="button" aria-label="Close">&times;</button><button class="lbbtn prev" type="button" aria-label="Previous photo">&#8249;</button><img alt=""><button class="lbbtn next" type="button" aria-label="Next photo">&#8250;</button>';
         document.body.appendChild(lb);
         lb.addEventListener('click',function(e){ if(e.target.classList.contains('prev')) show(cur-1); else if(e.target.classList.contains('next')) show(cur+1); else if(e.target===lb||e.target.classList.contains('close')) close(); });
         lb.addEventListener('touchstart',function(e){ tx=e.touches[0].clientX; },{passive:true});
         lb.addEventListener('touchend',function(e){ if(tx===null) return; var dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>40) show(cur+(dx<0?1:-1)); tx=null; });
+        document.addEventListener('keydown',function(e){ if(!lb||lb.hidden) return; if(e.key==='ArrowRight') show(cur+1); else if(e.key==='ArrowLeft') show(cur-1); else if(e.key==='Escape') close(); });
+        window.addEventListener('hashchange',close);
       }
       lb.hidden=false; document.body.classList.add('lock'); show(i); lb.querySelector('.next').focus();
     }
     function close(){ if(lb){ lb.hidden=true; document.body.classList.remove('lock'); } }
-    document.addEventListener('keydown',function(e){ if(!lb||lb.hidden) return; if(e.key==='ArrowRight') show(cur+1); else if(e.key==='ArrowLeft') show(cur-1); else if(e.key==='Escape') close(); });
     grid.addEventListener('click',function(e){ var b=e.target.closest('button[data-i]'); if(b) open(+b.dataset.i); });
-    window.addEventListener('hashchange',close);
+  }
+  (function(){
+    function pad(n){ return ('00'+n).slice(-3); }
+    var pic=['g_kids','g_sponsors','g_bocce','g_ironman','g_pasta','g_tent2','g_plaque'].map(function(n){ return [''+n+'.jpg',''+n+'.jpg']; });
+    for(var i=0;i<96;i++) pic.push(['gal/pic'+pad(i)+'.jpg','gal/pic'+pad(i)+'t.jpg']);
+    makeGallery('galGrid','galMore',pic,21,'Three Aces picnic');
+    var fd=[]; for(var j=0;j<5;j++) fd.push(['fdg/fd'+pad(j)+'.jpg','fdg/fd'+pad(j)+'t.jpg']);
+    makeGallery('fdGrid','fdMore',fd,12,'Christmas food drive');
   })();
 
   renderFeatured(); updateCount();
