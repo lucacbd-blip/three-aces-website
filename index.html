@@ -156,10 +156,10 @@
   .stat{ background:var(--bg); padding:22px 18px; }
   .stat b{ display:block; font-family:var(--display); font-size:44px; color:var(--gold); line-height:1; }
   .stat span{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
-  .story .photo{ position:relative; height:640px; max-height:80vw; overflow:hidden; border:1px solid var(--line); }
-  .story .photo img{ width:100%; height:100%; object-fit:cover; object-position:50% 40%; }
+  .story .photo{ position:relative; overflow:hidden; border:1px solid var(--line); align-self:center; }
+  .story .photo img{ width:100%; height:auto; display:block; }
   .story .photo .cap{ position:absolute; left:0; right:0; bottom:0; padding:18px; background:linear-gradient(0deg,rgba(7,7,7,.9),transparent); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
-  @media (max-width:860px){ .story{ grid-template-columns:1fr; } .story .photo{ height:auto; max-height:none; } .story .photo img{ height:auto; object-fit:contain; } .stats{ grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:860px){ .story{ grid-template-columns:1fr; } .stats{ grid-template-columns:repeat(3,1fr);} }
   @media (max-width:480px){ .stats{ grid-template-columns:1fr 1fr; } }
 
   /* picnic */
