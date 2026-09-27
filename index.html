@@ -103,7 +103,7 @@
   .hero .content{ position:relative; padding-block:150px 70px; width:100%; }
   .hero h1{ font-size:clamp(64px,11vw,150px); margin:14px 0 0; }
   .hero h1 .l{ display:block; }
-  .hero h1 .hon{ color:var(--gold); }
+  .hero h1 .l{ color:var(--gold); }
   .hero p{ max-width:560px; font-size:17px; color:#d9d4ca; margin:22px 0 32px; }
   .hero .ctas{ display:flex; flex-wrap:wrap; gap:14px; }
   .hero .badge{ position:absolute; right:24px; top:110px; width:118px; height:118px; border:1px solid rgba(214,178,94,.55); border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:rgba(7,7,7,.5); backdrop-filter:blur(6px); animation:spinIn 1.2s .3s ease both; }
@@ -156,9 +156,8 @@
   .stat{ background:var(--bg); padding:22px 18px; }
   .stat b{ display:block; font-family:var(--display); font-size:44px; color:var(--gold); line-height:1; }
   .stat span{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
-  .story.solo{ grid-template-columns:1fr; max-width:860px; }
   .story .photo{ position:relative; height:640px; max-height:80vw; overflow:hidden; border:1px solid var(--line); }
-  .story .photo img{ width:100%; height:100%; object-fit:cover; object-position:50% 0%; }
+  .story .photo img{ width:100%; height:100%; object-fit:cover; object-position:50% 40%; }
   .story .photo .cap{ position:absolute; left:0; right:0; bottom:0; padding:18px; background:linear-gradient(0deg,rgba(7,7,7,.9),transparent); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
   @media (max-width:860px){ .story{ grid-template-columns:1fr; } .stats{ grid-template-columns:repeat(3,1fr);} }
   @media (max-width:480px){ .stats{ grid-template-columns:1fr 1fr; } }
@@ -183,10 +182,7 @@
   .logo{ flex:0 0 calc(20% - 10px); min-width:150px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid var(--line2); padding:18px 22px; height:130px; transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s; position:relative; }
   .logo:hover{ transform:translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.5); }
   .logo img{ max-width:100%; max-height:100%; object-fit:contain; }
-  .logo.wide{ flex-basis:calc(40% - 12px); padding:10px 12px; }
   div.logo{ cursor:default; }
-  @media (max-width:860px){ .logo.wide{ flex-basis:calc(66.66% - 8px); } }
-  @media (max-width:520px){ .logo.wide{ flex-basis:100%; } }
   .logo span{ position:absolute; left:0; right:0; bottom:0; background:rgba(7,7,7,.85); color:var(--text); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; text-align:center; padding:6px 8px; opacity:0; transition:opacity .25s; }
   .logo:hover span{ opacity:1; }
   /* forms */
@@ -470,7 +466,7 @@
 
 <section id="view-story" class="view" hidden>
   <section class="blk" id="story">
-    <div class="wrap story solo">
+    <div class="wrap story">
       <div data-reveal>
         <span class="eyebrow">Who We Are</span>
         <h2 class="display">KEEPING THE<br>TRADITIONS ALIVE</h2>
@@ -482,6 +478,7 @@
           <div class="stat"><b>100%</b><span>Back into the community</span></div>
         </div>
       </div>
+      <div class="photo" data-reveal><img src="g_family.jpg" alt="Three Aces members and their kids under the club banner at the picnic"><div class="cap">Under the banner &middot; Annual Picnic &middot; Heart Lake</div></div>
     </div>
   </section>
 
@@ -1128,7 +1125,7 @@
   ];
   function logoTile(name,href,imgHtml){ var inner=imgHtml+'<span>'+esc(name)+'</span>';
     return href ? '<a class="logo" href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(name)+'">'+inner+'</a>' : '<div class="logo" title="'+esc(name)+'">'+inner+'</div>'; }
-  function widenLogos(){ document.querySelectorAll('#logoGrid .logo img').forEach(function(im){ if(im.dataset.w) return; im.dataset.w='1'; var f=function(){ if(im.naturalWidth && im.naturalWidth/im.naturalHeight>2.6) im.parentNode.classList.add('wide'); }; im.addEventListener('load',f); if(im.complete) f(); }); }
+  function widenLogos(){}
   document.getElementById('logoGrid').innerHTML=SPONSORS.map(function(x){ return logoTile(x.n, x.url||(x.ig?'https://www.instagram.com/'+x.ig+'/':''), '<img src="'+x.img+'" alt="'+esc(x.n)+'" loading="lazy">'); }).join('');
   widenLogos();
 
@@ -1175,7 +1172,7 @@
     var body=Object.keys(fields).map(function(k){ return (k==='email'?'Email':k)+': '+fields[k]; }).join('\n');
     var file=document.getElementById('logoFile').files[0]||null;
     busy(form,true);
-    sendForm('Sponsorship request: '+f.company, fields, {file:file, autoresponse:'Thank you for your interest in sponsoring the Three Aces Annual Picnic. We got your request and will be in touch within a couple of days. Grazie! Three Aces Italian Canadian Cultural Club'})
+    sendForm('Sponsorship request: '+f.company, fields, {file:file, autoresponse:'Thank you for your interest in sponsoring the Three Aces Annual Picnic! We received your request and someone from the club will reach out within 3 days.\n\nHere is what you sent us:\n'+body+'\n\nGrazie,\nThree Aces Italian Canadian Cultural Club'})
       .then(function(){ showSent('sponsorSent',true,f.name,f.email); form.reset(); document.getElementById('logoTxt').textContent='Click to attach your logo (PNG or JPG)'; document.getElementById('logoPreview').hidden=true; logoName=''; })
       .catch(function(){ showSent('sponsorSent',false,f.name,f.email,body); })
       .then(function(){ busy(form,false,'Send sponsorship request'); });
