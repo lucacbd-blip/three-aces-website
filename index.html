@@ -226,7 +226,11 @@
   .bignum{ display:flex; gap:34px; flex-wrap:wrap; margin:30px 0; }
   .bignum div b{ display:block; font-family:var(--display); font-size:64px; color:var(--gold); line-height:1; }
   .bignum div span{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
-  .gal.fdgal{ columns:2 160px; }
+  .gal.fdgal{ --row:170; columns:auto; display:flex; flex-wrap:wrap; gap:8px; }
+  .gal.fdgal::after{ content:''; flex-grow:1000; }
+  .gal.fdgal button{ width:auto; margin:0; flex:1 1 200px; }
+  .gal.fdgal img{ width:100%; height:auto; }
+  @media (max-width:600px){ .gal.fdgal{ --row:130; gap:6px; } }
   .steps{ display:flex; flex-direction:column; gap:0; margin-top:26px; border-top:1px solid var(--line); }
   .steps div{ display:grid; grid-template-columns:44px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); align-items:baseline; }
   .steps b{ font-family:var(--display); font-size:26px; color:var(--gold); }
@@ -1179,6 +1183,7 @@
     function render(upto){ var h=''; for(var i=shown;i<upto;i++) h+='<button type="button" data-i="'+i+'" aria-label="Open photo '+(i+1)+' of '+N+'"><img src="'+items[i][1]+'" alt="'+label+' photo '+(i+1)+'" loading="lazy"></button>'; grid.insertAdjacentHTML('beforeend',h); shown=upto; if(more){ if(shown>=N) more.hidden=true; else { more.hidden=false; more.textContent='Show all '+N+' photos'; } } }
     render(Math.min(SHOW,N));
     if(more) more.addEventListener('click',function(){ render(N); });
+    if(grid.classList.contains('fdgal')){ var ROW=parseFloat(getComputedStyle(grid).getPropertyValue('--row'))||170; grid.addEventListener('load',function(e){ var im=e.target; if(im.tagName!=='IMG'||!im.naturalWidth) return; var r=im.naturalWidth/im.naturalHeight; im.parentNode.style.flexGrow=r*100; im.parentNode.style.flexBasis=(r*ROW)+'px'; },true); }
     var lb=null, cur=0, tx=null;
     function show(i){ cur=(i+N)%N; lb.querySelector('img').src=items[cur][0]; lb.querySelector('.count').textContent=(cur+1)+' / '+N; [cur+1,cur-1].forEach(function(j){ var p=new Image(); p.src=items[(j+N)%N][0]; }); }
     function open(i){
@@ -1200,9 +1205,9 @@
     function pad(n){ return ('00'+n).slice(-3); }
     var pic=['g_kids','g_sponsors','g_bocce','g_ironman','g_pasta','g_tent2','g_plaque'].map(function(n){ return [''+n+'.jpg',''+n+'.jpg']; });
     var notPicnic={29:1,39:1,40:1,42:1,45:1,46:1,85:1,91:1};
-    for(var i=0;i<119;i++){ if(notPicnic[i]) continue; pic.push(['gal/pic'+pad(i)+'.jpg','gal/pic'+pad(i)+'t.jpg']); }
+    for(var i=0;i<120;i++){ if(notPicnic[i]) continue; pic.push(['gal/pic'+pad(i)+'.jpg','gal/pic'+pad(i)+'t.jpg']); }
     makeGallery('galGrid','galMore',pic,21,'Three Aces picnic');
-    var fd=[]; for(var j=0;j<10;j++) fd.push(['fdg/fd'+pad(j)+'.jpg','fdg/fd'+pad(j)+'t.jpg']);
+    var fd=[]; for(var j=0;j<9;j++) fd.push(['fdg/fd'+pad(j)+'.jpg','fdg/fd'+pad(j)+'t.jpg']);
     makeGallery('fdGrid','fdMore',fd,12,'Christmas food drive');
   })();
 
