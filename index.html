@@ -360,7 +360,7 @@
   .gal img{ width:100%; height:auto; display:block; transition:transform .5s, opacity .3s; }
   .gal button:hover img{ transform:scale(1.05); }
   .lb{ position:fixed; inset:0; z-index:90; background:rgba(5,5,5,.95); display:flex; align-items:center; justify-content:center; padding:calc(env(safe-area-inset-top,0px) + 56px) 70px calc(env(safe-area-inset-bottom,0px) + 56px); }
-  .lb img{ max-width:100%; max-height:100%; object-fit:contain; box-shadow:0 20px 60px rgba(0,0,0,.6); user-select:none; }
+  .lb img{ width:100%; height:100%; max-width:100%; max-height:100%; object-fit:contain; box-shadow:0 20px 60px rgba(0,0,0,.6); user-select:none; }
   .lb .lbbtn{ position:absolute; top:50%; transform:translateY(-50%); width:52px; height:52px; border-radius:50%; border:1px solid var(--line2); background:rgba(20,20,20,.8); color:var(--text); font-size:26px; line-height:1; display:flex; align-items:center; justify-content:center; }
   .lb .lbbtn:hover{ border-color:var(--gold); color:var(--gold); }
   .lb .prev{ left:12px; } .lb .next{ right:12px; }
@@ -1199,7 +1199,8 @@
   (function(){
     function pad(n){ return ('00'+n).slice(-3); }
     var pic=['g_kids','g_sponsors','g_bocce','g_ironman','g_pasta','g_tent2','g_plaque'].map(function(n){ return [''+n+'.jpg',''+n+'.jpg']; });
-    for(var i=0;i<119;i++) pic.push(['gal/pic'+pad(i)+'.jpg','gal/pic'+pad(i)+'t.jpg']);
+    var notPicnic={29:1,39:1,40:1,42:1,46:1,85:1,91:1};
+    for(var i=0;i<119;i++){ if(notPicnic[i]) continue; pic.push(['gal/pic'+pad(i)+'.jpg','gal/pic'+pad(i)+'t.jpg']); }
     makeGallery('galGrid','galMore',pic,21,'Three Aces picnic');
     var fd=[]; for(var j=0;j<10;j++) fd.push(['fdg/fd'+pad(j)+'.jpg','fdg/fd'+pad(j)+'t.jpg']);
     makeGallery('fdGrid','fdMore',fd,12,'Christmas food drive');
