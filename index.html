@@ -615,7 +615,7 @@
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <div><span class="eyebrow">Contact Us</span><h2 class="display">GET IN TOUCH</h2></div>
-        <p>Got a question about the club, an order, the picnic or the food drive? Send us a note. Everybody is welcome.</p>
+        <p>Got a question about the club, <span data-page="shop">an order, </span>the picnic or the food drive? Send us a note. Everybody is welcome.</p>
       </div>
       <div class="contact-grid" data-reveal>
         <div class="contact-list">
@@ -627,7 +627,7 @@
           <div class="fgrid">
             <div class="field"><label>Name</label><input name="name" required></div>
             <div class="field"><label>Email</label><input name="email" type="email" required></div>
-            <div class="field full"><label>What is it about?</label><select name="topic"><option>General question</option><option>An order</option><option>The Annual Picnic</option><option>The Christmas Food Drive</option><option>Joining the club</option><option>Sponsorship</option></select></div>
+            <div class="field full"><label>What is it about?</label><select name="topic"><option>General question</option><option data-page="shop">An order</option><option>The Annual Picnic</option><option>The Christmas Food Drive</option><option>Joining the club</option><option>Sponsorship</option></select></div>
             <div class="field full"><label>Message</label><textarea name="message" required></textarea></div>
           </div>
           <button class="btn btn-fill" type="submit">Send message</button>
@@ -737,6 +737,12 @@
       document.documentElement.classList.toggle('off-'+k, off);
       var sel=PAGE_VIEWS[k].map(function(v){ return 'a[data-view="'+v+'"],a[href="#'+v+'"]'; }).join(',')+',[data-page="'+k+'"]'+(k==='sponsors'?',a[href="#sponsor"]':'');
       document.querySelectorAll(sel).forEach(function(el){ el.classList.toggle('pg-off', off); });
+      /* <option> ignores display:none on iPhone, so pull it out of the list instead */
+      document.querySelectorAll('select').forEach(function(se){
+        se._offOpts=se._offOpts||[];
+        if(off){ Array.prototype.slice.call(se.querySelectorAll('option[data-page="'+k+'"]')).forEach(function(o){ se._offOpts.push({el:o,idx:Array.prototype.indexOf.call(se.options,o)}); o.remove(); }); }
+        else { se._offOpts=se._offOpts.filter(function(r){ if(r.el.dataset.page!==k) return true; se.add(r.el, se.options[r.idx]||null); return false; }); }
+      });
     });
     document.querySelectorAll('#tickerTrack span').forEach(function(sp){ sp.hidden=!pageOn('shop') && /stock/i.test(sp.textContent); });
   }
@@ -1135,14 +1141,20 @@
     if(opts.autoresponse) fd.append('_autoresponse',opts.autoresponse);
     Object.keys(fields).forEach(function(k){ var v=fields[k]; if(v!==undefined && v!==null && v!=='') fd.append(k,v); });
     if(opts.file) fd.append('attachment',opts.file,opts.file.name);
-    return fetch('https://formsubmit.co/ajax/'+encodeURIComponent(FORMS.to),{method:'POST',headers:{'Accept':'application/json'},body:fd})
-      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok || !(j.success===true||j.success==='true')) throw new Error(j.message||('HTTP '+r.status)); return j; }); })
+    /* FormSubmit has the odd hiccup, so try up to 3 times before giving up */
+    function attempt(n){
+      return fetch('https://formsubmit.co/ajax/'+encodeURIComponent(FORMS.to),{method:'POST',headers:{'Accept':'application/json'},body:fd})
+        .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if(!r.ok || !(j.success===true||j.success==='true')) throw new Error(j.message||('HTTP '+r.status)); return j; }); })
+        .catch(function(err){ if(n<3){ return new Promise(function(res){ setTimeout(res, 1500*n); }).then(function(){ return attempt(n+1); }); } throw err; });
+    }
+    return attempt(1)
       .catch(function(err){ if(opts.file){ fields['Logo']=(fields['Logo']||'')+' (the attachment did not come through, ask them to email it)'; return sendForm(subject,fields,{autoresponse:opts.autoresponse}); } throw err; });
   }
   function showSent(id,ok,name,email,body){
     var box=document.getElementById(id);
-    if(ok){ box.innerHTML='<b>Thanks'+(name?', '+esc(name.split(' ')[0]):'')+'. It&rsquo;s on its way.</b><span>We&rsquo;ll get back to you at '+esc(email)+'. You&rsquo;ll also get a short email confirming we have it.</span>'; }
-    else{ box.innerHTML='<b>Sorry, that didn&rsquo;t go through.</b><span>Please email us at <b>'+esc(CLUB_EMAIL)+'</b>. Here&rsquo;s your message so you can copy it:</span><pre>'+esc(body)+'</pre><div><button type="button" class="btn btn-sm" data-copy>Copy the message</button></div>';
+    if(ok){ box.innerHTML='<b>Thanks'+(name?', '+esc(name.split(' ')[0]):'')+'. It&rsquo;s on its way.</b><span>We&rsquo;ll get back to you at '+esc(email)+'. </span>'; }
+    else{ var ml='mailto:'+encodeURIComponent(CLUB_EMAIL)+'?subject='+encodeURIComponent('Message from the Three Aces website')+'&body='+encodeURIComponent(body);
+      box.innerHTML='<b>Sorry, our form service is not responding right now.</b><span>Nothing is lost. Send it straight from your email app, or copy it and email <b>'+esc(CLUB_EMAIL)+'</b>:</span><pre>'+esc(body)+'</pre><div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-sm btn-fill" href="'+ml+'">Open in my email app</a><button type="button" class="btn btn-sm" data-copy>Copy the message</button></div>';
       box.querySelector('[data-copy]').addEventListener('click',function(){ var b=this; try{ navigator.clipboard.writeText(body).then(function(){ b.textContent='Copied'; }); }catch(e){ b.textContent='Select the text above'; } }); }
     box.hidden=false; box.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
