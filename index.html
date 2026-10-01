@@ -182,6 +182,18 @@
   .logo:hover{ transform:translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.5); }
   .logo img{ max-width:100%; max-height:100%; object-fit:contain; }
   div.logo{ cursor:default; }
+  button.logo{ cursor:pointer; font:inherit; color:inherit; }
+  button.logo:hover{ border-color:var(--gold); }
+  .spm{ position:fixed; inset:0; z-index:95; background:rgba(5,5,5,.9); display:flex; align-items:center; justify-content:center; padding:20px; }
+  .spm .card{ position:relative; width:min(440px,100%); background:var(--panel); border:1px solid var(--line2); padding:28px 24px 24px; text-align:center; }
+  .spm .close{ position:absolute; top:8px; right:8px; width:40px; height:40px; border-radius:50%; border:1px solid var(--line2); background:transparent; color:var(--text); font-size:24px; cursor:pointer; }
+  .spm .lg{ background:#fff; height:110px; display:flex; align-items:center; justify-content:center; padding:10px; margin:0 auto 16px; max-width:260px; }
+  .spm .lg img{ max-width:100%; max-height:100%; object-fit:contain; }
+  .spm h3{ font-family:var(--display); font-size:26px; letter-spacing:.03em; margin:0 0 2px; }
+  .spm p{ color:var(--muted); font-size:13px; letter-spacing:.12em; text-transform:uppercase; margin:0 0 16px; }
+  .spm .links{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .spm .links .btn{ flex:1 1 calc(50% - 5px); min-width:140px; }
+  .spm .links svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
   .logo span{ position:absolute; left:0; right:0; bottom:0; background:rgba(7,7,7,.85); color:var(--text); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; text-align:center; padding:6px 8px; opacity:0; transition:opacity .25s; }
   .logo:hover span{ opacity:1; }
   /* forms */
@@ -418,7 +430,7 @@
     <div class="wrap content">
       <span class="eyebrow">Toronto &middot; Est. 2013</span>
       <h1 class="display"><span class="l">FAITH.</span><span class="l">LOYALTY.</span><span class="l hon">HONOR.</span></h1>
-      <p>An Italian Canadian cultural club founded in 2013 to keep the traditions alive and keep families together. Everyone is welcome. Everything we raise goes back into the club and the community: the Annual Picnic, the Christmas Food Drive, and people who need a hand.</p>
+      <p>An Italian Canadian cultural club founded in 2013 to keep the traditions alive and keep families together. You don&rsquo;t have to be Italian. If you appreciate the Italian culture and way of life, there is a seat for you at our table. Everything we raise goes back into the club and the community: the Annual Picnic, the Christmas Food Drive, and people who need a hand.</p>
       <div class="ctas">
         <a class="btn btn-fill" href="#shop" data-view="shop">Shop the Gear</a>
         <a class="btn btn-fill" href="#picnic" data-view="picnic" data-ifoff="shop">The Annual Picnic</a>
@@ -428,7 +440,7 @@
   </div>
   <div class="tricolor"><i></i><i></i><i></i></div>
   <div class="ticker"><div class="track" id="tickerTrack">
-    <span><i></i>10th Annual Picnic &middot; Summer 2027</span><span><i></i>6th Annual Christmas Food Drive &middot; December 2026</span><span><i></i>Every dollar goes back to the club &amp; community</span><span><i></i>Limited stock &middot; Once it&rsquo;s gone, it&rsquo;s gone</span><span><i></i>Everybody is welcome &middot; Est. 2013</span><span><i></i>@three_aces_italian</span>
+    <span><i></i>10th Annual Picnic &middot; Summer 2027</span><span><i></i>6th Annual Christmas Food Drive &middot; December 2026</span><span><i></i>Every dollar goes back to the club &amp; community</span><span><i></i>Limited stock &middot; Once it&rsquo;s gone, it&rsquo;s gone</span><span><i></i>Appreciate the Italian way of life? There&rsquo;s a seat for you &middot; Est. 2013</span><span><i></i>@three_aces_italian</span>
   </div></div>
 
   <!-- featured gear -->
@@ -447,9 +459,9 @@
   <section class="blk" style="padding-top:0;">
     <div class="wrap">
       <div class="facts" data-reveal style="margin-top:0;">
-        <a class="fact" href="#story" data-view="story"><b>WHO WE ARE</b><span>Founded in Toronto in 2013 to keep the Italian traditions alive and families together. Everybody is welcome.</span><span style="color:var(--gold);margin-top:6px;">Read our story &rarr;</span></a>
-        <a class="fact" href="#picnic" data-view="picnic"><b>THE ANNUAL PICNIC</b><span>Nine down. The 10th Annual Picnic is summer 2027 at Heart Lake.</span><span style="color:var(--gold);margin-top:6px;">See the picnic &rarr;</span></a>
-        <a class="fact" href="#fooddrive" data-view="fooddrive"><b>CHRISTMAS FOOD DRIVE</b><span>$4,517 raised at the <span class="fdyr">2025</span> food drive, 100% turned into grocery gift cards at St. Philip Neri.</span><span style="color:var(--gold);margin-top:6px;">The food drive &rarr;</span></a>
+        <a class="fact" href="#story" data-view="story"><b>WHO WE ARE</b><span>Founded in Toronto in 2013 to keep the Italian traditions alive and families together. You don&rsquo;t have to be Italian to pull up a chair.</span><span style="color:var(--gold);margin-top:6px;">Read our story &rarr;</span></a>
+        <a class="fact" href="#picnic" data-view="picnic"><b>THE ANNUAL PICNIC</b><span>Nine down. The 10th Annual Picnic is summer 2027. Invite only, for the famiglia and our supporters.</span><span style="color:var(--gold);margin-top:6px;">See the picnic &rarr;</span></a>
+        <a class="fact" href="#fooddrive" data-view="fooddrive"><b>CHRISTMAS FOOD DRIVE</b><span>$4,517 raised at the <span class="fdyr">2025</span> food drive, 100% of it to families through St. Philip Neri&rsquo;s Table.</span><span style="color:var(--gold);margin-top:6px;">The food drive &rarr;</span></a>
         <a class="fact" href="#sponsors" data-view="sponsors"><b>OUR SPONSORS</b><span>The businesses that make the picnic possible, and how you can become one.</span><span style="color:var(--gold);margin-top:6px;">Meet the sponsors &rarr;</span></a>
       </div>
     </div>
@@ -469,7 +481,7 @@
         <span class="eyebrow">Who We Are</span>
         <h2 class="display">KEEPING THE<br>TRADITIONS ALIVE</h2>
         <p>Three Aces Italian Canadian Cultural Club was founded in Toronto in 2013 by a group of friends who saw the traditions they grew up with starting to slip away. The Sunday lunches, the picnics, the whole family in one place. We started the club to keep the traditions alive, and to keep families and their children together the way our parents and grandparents kept us together.</p>
-        <p>You don&rsquo;t have to be Italian. Everybody is welcome at our table. We're run by volunteers, and everything we raise goes back into the picnic, the food drive and the community.</p>
+        <p>You don&rsquo;t have to be Italian. If you appreciate the Italian culture and way of life, the food, the family, the Sunday table, then everyone is welcome at ours. We're run by volunteers, and everything we raise goes back into the picnic, the food drive and the community.</p>
         <div class="stats">
           <div class="stat"><b>2013</b><span>Founded in Toronto</span></div>
           <div class="stat"><b>$4,517</b><span><span class="fdyr">2025</span> Christmas Food Drive</span></div>
@@ -489,14 +501,14 @@
       <div class="sec-head" data-reveal>
         <div><span class="eyebrow">Annual Picnic</span><h2 class="display">THE 10TH ANNUAL<br>THREE ACES PICNIC</h2></div>
         <div>
-          <p>One Sunday every summer at Heart Lake Conservation Area in Brampton. Pasta, pizza, bocce, a raffle, a live performer, and the pool and splash pad for the kids. Everything raised through clothing and the raffle goes straight back into the picnic and the food drive. All of it. Nine down, and the tenth is going to be a big one.</p>
-          <div class="datebox"><b>2027</b><span>Summer 2027 &middot; Heart Lake, Birchview #1<br>Date to be announced</span></div>
+          <p>One Sunday every summer, our invite only picnic for the Three Aces famiglia and our supporters. Pasta, pizza, bocce, a raffle, a live performer, and the pool and splash pad for the kids, all made possible by our sponsors. Everything raised through clothing and the raffle goes straight back into the picnic and the food drive. All of it. Nine down, and the tenth is going to be a big one.</p>
+          <div class="datebox"><b>2027</b><span>Summer 2027 &middot; Invite only<br>Date to be announced</span></div>
           <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;"><a class="btn btn-gold btn-sm" href="#sponsor">Become a Sponsor</a><a class="btn btn-sm" href="#sponsors" data-view="sponsors">Our Sponsors</a></div>
         </div>
       </div>
       <div class="facts" data-reveal>
-        <div class="fact"><svg viewBox="0 0 24 24"><path d="M4 12h16M6 12a6 6 0 0012 0M8 6l1 3M16 6l-1 3M12 4v5"/></svg><b>THE FOOD</b><span>Pizza by Bolton Pizza Panini and pasta by Multi Pasta, with espresso and sweets.</span></div>
-        <div class="fact"><svg viewBox="0 0 24 24"><circle cx="8" cy="14" r="4"/><circle cx="17" cy="9" r="3"/><path d="M12 20h9"/></svg><b>BOCCE TOURNAMENT</b><span>Sign up on the day. Winners take home the trophies.</span></div>
+        <div class="fact"><svg viewBox="0 0 24 24"><path d="M4 12h16M6 12a6 6 0 0012 0M8 6l1 3M16 6l-1 3M12 4v5"/></svg><b>THE FOOD</b><span>Pizza, pasta, espresso and sweets, all on the table thanks to our gracious sponsors. It costs nothing to come.</span></div>
+        <div class="fact"><svg viewBox="0 0 24 24"><circle cx="8" cy="14" r="4"/><circle cx="17" cy="9" r="3"/><path d="M12 20h9"/></svg><b>OLD SCHOOL BOCCE</b><span>An Italian bocce tournament the way it was played back home. Sign up on the day, winners take the trophies.</span></div>
         <div class="fact"><svg viewBox="0 0 24 24"><path d="M4 8h16v10H4zM4 8l2-4h12l2 4M9 12h6"/></svg><b>RAFFLE &amp; PRIZES</b><span>Tickets sold all afternoon. Every dollar funds next year&rsquo;s picnic and the food drive.</span></div>
         <div class="fact"><svg viewBox="0 0 24 24"><path d="M6 4l6 4 6-4v14l-6 2-6-2z"/></svg><b>THE CLOTHING STATION</b><span>An exclusive picnic-colour tee every year, limited sizes, plus one-day-only deals on the rest.</span></div>
       </div>
@@ -521,15 +533,15 @@
       <div data-reveal>
         <span class="eyebrow">Christmas Food Drive</span>
         <h2 class="display">6TH ANNUAL<br>CHRISTMAS FOOD DRIVE</h2>
-        <p>Every December, Three Aces goes to the St. Philip Neri food bank in Toronto and hands out grocery gift cards to families who need them. Everything we raise goes back into the community.</p>
+        <p>Every December, Three Aces supports St. Philip Neri&rsquo;s Table in Toronto, a partner agency of North York Harvest Food Bank, and the families it feeds through the holidays. Everything we raise goes back into the community.</p>
         <div class="bignum">
           <div><b>$4,517</b><span>Raised in <span class="fdyr">2025</span></span></div>
           <div><b>100%</b><span>Goes back to the community</span></div>
         </div>
         <div class="steps">
           <div><b>01</b><span>We launch the GoFundMe in November and the whole club gets behind it.</span></div>
-          <div><b>02</b><span>Every dollar raised goes into grocery gift cards and the hand-out day.</span></div>
-          <div><b>03</b><span>We hand them out in person at the St. Philip Neri food bank in Toronto, before Christmas.</span></div>
+          <div><b>02</b><span>Every dollar raised goes to the families, nothing to the club.</span></div>
+          <div><b>03</b><span>We deliver it in person at St. Philip Neri&rsquo;s Table, before Christmas.</span></div>
         </div>
         <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
           <a class="btn btn-gold" id="donateBtn" href="#fooddrive" data-view="fooddrive">Donate on GoFundMe</a>
@@ -549,7 +561,7 @@
       <div class="sponsors" data-reveal id="sponsors" style="margin-top:20px;padding-top:0;border-top:none;">
         <div class="sec-head" style="margin-bottom:26px;align-items:flex-end;">
           <div><span class="eyebrow">Our Sponsors</span><h1 class="display" style="font-size:clamp(40px,6vw,74px);margin:12px 0 0;">THANK YOU TO OUR<br><span class="spyr">2026</span> PICNIC SPONSORS</h1></div>
-          <p style="max-width:460px;">Every sponsor gets an honourable mention at the picnic, their logo on the invitation, a custom plaque, and a spot on the sponsor roll all day long. Tap a logo to visit them, and please leave them a 5-star Google review.</p>
+          <p style="max-width:460px;">Every sponsor gets an honourable mention at the picnic, their logo on the invitation, a custom plaque, and a spot on the sponsor roll all day long. Tap a logo to find them online, and please leave them a 5-star Google review.</p>
         </div>
         <div class="logos" id="logoGrid"></div>
         <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;"><a class="btn btn-gold" href="#sponsor">Become a Sponsor</a></div>
@@ -615,7 +627,7 @@
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <div><span class="eyebrow">Contact Us</span><h2 class="display">GET IN TOUCH</h2></div>
-        <p>Got a question about the club, <span data-page="shop">an order, </span>the picnic or the food drive? Send us a note. Everybody is welcome.</p>
+        <p>Got a question about the club, <span data-page="shop">an order, </span>the picnic or the food drive? Send us a note.</p>
       </div>
       <div class="contact-grid" data-reveal>
         <div class="contact-list">
@@ -627,7 +639,7 @@
           <div class="fgrid">
             <div class="field"><label>Name</label><input name="name" required></div>
             <div class="field"><label>Email</label><input name="email" type="email" required></div>
-            <div class="field full"><label>What is it about?</label><select name="topic"><option>General question</option><option data-page="shop">An order</option><option>The Annual Picnic</option><option>The Christmas Food Drive</option><option>Joining the club</option><option>Sponsorship</option></select></div>
+            <div class="field full"><label>What is it about?</label><select name="topic"><option>General question</option><option data-page="shop">An order</option><option>The Annual Picnic</option><option>The Christmas Food Drive</option><option>Sponsorship</option></select></div>
             <div class="field full"><label>Message</label><textarea name="message" required></textarea></div>
           </div>
           <button class="btn btn-fill" type="submit">Send message</button>
@@ -1100,24 +1112,48 @@
 
   /* ===================== SPONSORS ===================== */
   var SPONSORS=[
-    {n:'Bolton Pizza Panini',img:'sp-bolton.jpg',url:'https://www.boltonpizzapanini.ca',ig:'boltonpizzapanini'},
-    {n:'Multi Pasta',img:'sp-multipasta.jpg',url:'https://www.multipasta.com',ig:'multi_pasta'},
-    {n:'Popular Supermarket',img:'sp-popular.jpg',url:'https://www.instagram.com/popular_supermarket1990/',ig:'popular_supermarket1990'},
-    {n:'Egnatia Paving',img:'sp-egnatia.jpg',url:'https://www.egnatia.ca',ig:'egnatiapaving'},
+    {n:'Bolton Pizza Panini',img:'sp-bolton.jpg',url:'https://www.boltonpizzapanini.ca',ig:'boltonpizzapanini',fb:'https://www.facebook.com/boltonpizzapanini/',g:'https://www.google.com/maps/search/?api=1&query=Bolton+Pizza+Panini,+12599+Hwy+50+%231,+Bolton,+ON'},
+    {n:'Multi Pasta',img:'sp-multipasta.jpg',url:'https://multipasta.com',ig:'multi_pasta',fb:'https://www.facebook.com/multipastaa/',g:'https://www.google.com/maps/search/?api=1&query=Multi+Pasta,+14+Oxford+St+Unit+8,+Richmond+Hill,+ON'},
+    {n:'Popular Supermarket',img:'sp-popular.jpg',url:'',ig:'popular_supermarket1990',g:'https://www.google.com/maps/search/?api=1&query=Popular+Supermarket,+216+Chambers+Ave,+Toronto,+ON'},
+    {n:'Egnatia Paving',img:'sp-egnatia.jpg',url:'https://www.egnatia.ca',ig:'egnatiapaving',g:'https://www.google.com/maps/search/?api=1&query=Egnatia+Paving,+36+Stoffel+Dr,+Etobicoke,+ON'},
     {n:'Bar Amaro',img:'sp-baramaro.jpg',url:'https://www.baramaro.ca',ig:'baramaro.ca'},
-    {n:'Burn Media Corp',img:'sp-burn.jpg',url:'https://www.burnmediacorp.com',ig:'burnmediacorp'},
-    {n:'GOBRO CON Inc.',img:'sp-gobro.jpg',url:'https://www.gobrocon.com'},
-    {n:'MTF Group Ltd.',img:'sp-mtf.jpg',url:'https://www.mtfgroup.ca',ig:'mtf_group'},
-    {n:'Liquidation Event Auctions',img:'sp-liquidation.jpg',url:'https://www.liquidationevent.com',ig:'liquidationevent'},
-    {n:'Funtimes Event Rentals',img:'sp-funtimes.jpg',url:'https://www.funtimeseventrentals.ca',ig:'funtimeseventrentals'},
-    {n:'Belvedere Property Management & Inspections',img:'sp-belvedere.jpg',url:'https://www.na-ahi.org',ig:'belvedere_properties'},
-    {n:'Joseph & Mike\u2019s Barber Shop',img:'sp-josephmike.jpg',url:'https://www.josephandmikesbarbershop.com',ig:'josephandmikes_.barbershop1966'},
-    {n:'Tony & Adriana Puzzo',img:'sp-puzzo.jpg',url:''}
+    {n:'Burn Media Corp',img:'sp-burn.jpg',url:'https://www.burnmediacorp.com',ig:'burnmediacorp',g:'https://www.google.com/maps/search/?api=1&query=Burn+Media+Corp,+4+Automatic+Rd,+Brampton,+ON'},
+    {n:'GOBRO CON Inc.',img:'sp-gobro.jpg',url:'https://www.gobrocon.com',g:'https://www.google.com/maps/search/?api=1&query=Gobro+Con+Inc,+25+Hansen+Rd+S,+Brampton,+ON'},
+    {n:'MTF Group Ltd.',img:'sp-mtf.jpg',url:'https://www.mtfgroup.ca',ig:'mtf_group',g:'https://www.google.com/maps/place/?q=place_id:ChIJG5h2Xaw2K4gRCot3B8mYaWs'},
+    {n:'Liquidation Event Auctions',img:'sp-liquidation.jpg',url:'https://www.liquidationevent.com',ig:'liquidationevent',fb:'https://www.facebook.com/p/Liquidation-Event-Mississauga-100063695060487/',g:'https://www.google.com/maps/search/?api=1&query=Liquidation+Event,+1725+Matheson+Blvd+Unit+2,+Mississauga,+ON'},
+    {n:'Funtimes Event Rentals',img:'sp-funtimes.jpg',url:'https://www.funtimeseventrentals.ca',ig:'funtimeseventrentals',fb:'https://www.facebook.com/people/Fun-Times-Event-Rentals/61558354257991/',g:'https://www.google.com/maps/search/?api=1&query=Fun+Times+Event+Rentals,+471+Jevlan+Dr+%237,+Woodbridge,+ON'},
+    {n:'Belvedere Property Management & Inspections',img:'sp-belvedere.jpg',url:'',ig:'belvedere_properties'},
+    {n:'Joseph & Mike\u2019s Barber Shop',img:'sp-josephmike.jpg',url:'https://www.josephandmikesbarbershop.com',ig:'josephandmikes_.barbershop1966',fb:'https://www.facebook.com/people/Joseph-Mikes-Barber-Shop/61551053120696/',g:'https://www.google.com/maps/search/?api=1&query=Joseph+%26+Mike%27s+Barber+Shop,+148+Main+St+E,+Milton,+ON'},
+    {n:'Tony & Adriana Puzzo',img:'sp-puzzo.jpg',url:'https://www.teampuzzo.ca'}
   ];
-  function logoTile(name,href,imgHtml){ var inner=imgHtml+'<span>'+esc(name)+'</span>';
-    return href ? '<a class="logo" href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(name)+'">'+inner+'</a>' : '<div class="logo" title="'+esc(name)+'">'+inner+'</div>'; }
+  var SP_ICON={
+    web:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>',
+    ig:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
+    fb:'<svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 00-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/></svg>',
+    g:'<svg viewBox="0 0 24 24"><path d="M12 22s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>'
+  };
+  function spLinks(x){ var L=[];
+    if(x.url) L.push(['web','Website',x.url]);
+    if(x.ig) L.push(['ig','Instagram','https://www.instagram.com/'+x.ig.replace(/^@/,'')+'/']);
+    if(x.fb) L.push(['fb','Facebook',x.fb]);
+    if(x.g) L.push(['g','Google',x.g]);
+    return L; }
+  var SP_LIST=[];
+  function logoTile(x,imgHtml){ var i=SP_LIST.push(x)-1, L=spLinks(x), inner=imgHtml+'<span>'+esc(x.n)+'</span>';
+    return L.length ? '<button type="button" class="logo" data-sp="'+i+'" title="'+esc(x.n)+'" aria-label="'+esc(x.n)+' links">'+inner+'</button>' : '<div class="logo" title="'+esc(x.n)+'">'+inner+'</div>'; }
+  function spOpen(x){
+    var m=document.getElementById('spSheet'); if(!m){ m=document.createElement('div'); m.id='spSheet'; m.className='spm'; m.setAttribute('role','dialog'); document.body.appendChild(m);
+      m.addEventListener('click',function(e){ if(e.target===m||e.target.closest('.close')) spClose(); });
+      document.addEventListener('keydown',function(e){ if(e.key==='Escape') spClose(); }); }
+    var logo=x.img ? '<img src="'+esc(x.img)+'" alt="">' : (x.logoId ? '<img data-file="'+esc(x.logoId)+'" alt="">' : '');
+    m.innerHTML='<div class="card"><button class="close" type="button" aria-label="Close">&times;</button><div class="lg">'+logo+'</div><h3>'+esc(x.n)+'</h3><p>Find them here</p><div class="links">'+
+      spLinks(x).map(function(l){ return '<a class="btn btn-sm" href="'+esc(l[2])+'" target="_blank" rel="noopener">'+SP_ICON[l[0]]+l[1]+'</a>'; }).join('')+'</div></div>';
+    m.hidden=false; document.body.classList.add('lock'); if(typeof hydrateImages==='function') hydrateImages(); }
+  function spClose(){ var m=document.getElementById('spSheet'); if(m){ m.hidden=true; document.body.classList.remove('lock'); } }
   function widenLogos(){}
-  document.getElementById('logoGrid').innerHTML=SPONSORS.map(function(x){ return logoTile(x.n, x.url||(x.ig?'https://www.instagram.com/'+x.ig+'/':''), '<img src="'+x.img+'" alt="'+esc(x.n)+'" loading="lazy">'); }).join('');
+  function renderLogoGrid(list){ SP_LIST=[]; document.getElementById('logoGrid').innerHTML=list.map(function(x){ return logoTile(x, x.img ? '<img src="'+x.img+'" alt="'+esc(x.n)+'" loading="lazy">' : (x.logoId ? '<img data-file="'+esc(x.logoId)+'" alt="'+esc(x.n)+'">' : '<b style="color:#141414;font-family:var(--display);font-size:20px">'+esc(x.n)+'</b>')); }).join(''); }
+  renderLogoGrid(SPONSORS);
+  document.getElementById('logoGrid').addEventListener('click',function(e){ var b=e.target.closest('button[data-sp]'); if(b) spOpen(SP_LIST[+b.dataset.sp]); });
   widenLogos();
 
   /* ===================== FORMS ===================== */
@@ -1243,8 +1279,8 @@
     if(hel && (hel.hidden===viewOn(hv))) syncFromHash();
     var pic=c.picnic||{}, fd=c.foodDrive||{}, ct=c.contact||{}, sh=c.shipping||{};
     function setHTML(sel,h){ document.querySelectorAll(sel).forEach(function(e){ e.innerHTML=h; }); }
-    if(pic.annual){ setHTML('.hero .badge','<b>'+pic.annual+'<sup>'+ord(pic.annual).replace(/^\d+/,'')+'</sup></b><span>Annual<br>Picnic '+(pic.year||'')+'</span>'); setHTML('#view-picnic .sec-head h2','THE '+ord(pic.annual).toUpperCase()+' ANNUAL<br>THREE ACES PICNIC'); document.querySelectorAll('.fact b').forEach(function(b){ if(/ANNUAL PICNIC/.test(b.textContent)) b.nextElementSibling.textContent='The '+ord(pic.annual)+' Annual Picnic is '+(pic.dateText||'coming')+' at '+((pic.location||'Heart Lake').split(',')[0])+'.'; }); }
-    if(pic.year||pic.dateText||pic.location){ var db=document.querySelector('#view-picnic .datebox'); if(db) db.innerHTML='<b>'+esc(pic.year||'')+'</b><span>'+esc((pic.location||'').split(',')[0])+'<br>'+esc(pic.dateText||'')+'</span>'; }
+    if(pic.annual){ setHTML('.hero .badge','<b>'+pic.annual+'<sup>'+ord(pic.annual).replace(/^\d+/,'')+'</sup></b><span>Annual<br>Picnic '+(pic.year||'')+'</span>'); setHTML('#view-picnic .sec-head h2','THE '+ord(pic.annual).toUpperCase()+' ANNUAL<br>THREE ACES PICNIC'); document.querySelectorAll('.fact b').forEach(function(b){ if(/ANNUAL PICNIC/.test(b.textContent)) b.nextElementSibling.textContent='Nine down. The '+ord(pic.annual)+' Annual Picnic is '+(pic.dateText&&!/announce/i.test(pic.dateText)?pic.dateText:'summer '+(pic.year||''))+'. Invite only, for the famiglia and our supporters.'; }); }
+    if(pic.year||pic.dateText||pic.location){ var db=document.querySelector('#view-picnic .datebox'); if(db) db.innerHTML='<b>'+esc(pic.year||'')+'</b><span>Summer '+esc(pic.year||'')+' &middot; Invite only<br>'+esc(pic.dateText||'')+'</span>'; }
     if(pic.photos&&pic.photos.length){ var mo=document.querySelector('#view-picnic .mosaic'); if(mo) mo.innerHTML=pic.photos.slice(0,8).map(function(id){ return '<div><img data-file="'+esc(id)+'" alt=""></div>'; }).join(''); }
     if(fd.annual){ setHTML('#view-fooddrive h2.display',ord(fd.annual).toUpperCase()+' ANNUAL<br>CHRISTMAS FOOD DRIVE'); }
     if(fd.lastYear){ document.querySelectorAll('.fdyr').forEach(function(e){ e.textContent=fd.lastYear; }); }
@@ -1261,7 +1297,7 @@
     if(c.forms){ if(c.forms.to) FORMS.to=c.forms.to; if(typeof c.forms.cc==='string') FORMS.cc=c.forms.cc; }
     if(c.sponsorsYear){ document.querySelectorAll('.spyr').forEach(function(e){ e.textContent=c.sponsorsYear; }); }
     if(c.sponsors && Object.keys(c.sponsors).length){ var list=Object.keys(c.sponsors).map(function(k){ return c.sponsors[k]; }).filter(function(x){ return x&&x.show!==false; }).sort(function(a,b){ return (a.order||0)-(b.order||0); });
-      document.getElementById('logoGrid').innerHTML=list.length ? list.map(function(x){ return logoTile(x.name, x.url||(x.instagram?'https://www.instagram.com/'+x.instagram+'/':''), x.logoId?'<img data-file="'+esc(x.logoId)+'" alt="'+esc(x.name)+'">':'<b style="color:#141414;font-family:var(--display);font-size:20px">'+esc(x.name)+'</b>'); }).join('') : '<p class="muted">This year\u2019s sponsors will be up here soon.</p>'; }
+      if(list.length) renderLogoGrid(list.map(function(x){ return {n:x.name,url:x.url||'',ig:x.instagram||'',fb:x.facebook||'',g:x.google||'',logoId:x.logoId||''}; })); else document.getElementById('logoGrid').innerHTML='<p class="muted">This year\u2019s sponsors will be up here soon.</p>'; }
     hydrateImages(); widenLogos();
   }
   function goLive(){
